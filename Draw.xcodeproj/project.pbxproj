@@ -1,0 +1,652 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A74B41F92A729CB2009797AE /* utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = A74B41F82A729CB2009797AE /* utility.swift */; };
+		A772F7982A153C5000D74521 /* Shape.swift in Sources */ = {isa = PBXBuildFile; fileRef = A772F7972A153C5000D74521 /* Shape.swift */; };
+		A772F79A2A17693000D74521 /* CanvasViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A772F7992A17693000D74521 /* CanvasViewDelegate.swift */; };
+		A772F79C2A17697800D74521 /* Stroke.swift in Sources */ = {isa = PBXBuildFile; fileRef = A772F79B2A17697800D74521 /* Stroke.swift */; };
+		A772F79E2A1769B400D74521 /* Drawing.swift in Sources */ = {isa = PBXBuildFile; fileRef = A772F79D2A1769B400D74521 /* Drawing.swift */; };
+		A772F7A02A176A6700D74521 /* Tool.swift in Sources */ = {isa = PBXBuildFile; fileRef = A772F79F2A176A6700D74521 /* Tool.swift */; };
+		A775CA952A12C2FE0032988D /* DrawApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A775CA942A12C2FE0032988D /* DrawApp.swift */; };
+		A775CA9A2A12C2FE0032988D /* Draw.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A775CA982A12C2FE0032988D /* Draw.xcdatamodeld */; };
+		A775CA9C2A12C2FE0032988D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A775CA9B2A12C2FE0032988D /* ContentView.swift */; };
+		A775CA9E2A12C2FF0032988D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A775CA9D2A12C2FF0032988D /* Assets.xcassets */; };
+		A775CAAC2A12C2FF0032988D /* DrawTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A775CAAB2A12C2FF0032988D /* DrawTests.swift */; };
+		A775CAB62A12C2FF0032988D /* DrawUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A775CAB52A12C2FF0032988D /* DrawUITests.swift */; };
+		A775CAB82A12C2FF0032988D /* DrawUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A775CAB72A12C2FF0032988D /* DrawUITestsLaunchTests.swift */; };
+		A775CAC52A12C39C0032988D /* CanvasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A775CAC42A12C39C0032988D /* CanvasView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		A775CAA82A12C2FF0032988D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A775CA892A12C2FE0032988D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A775CA902A12C2FE0032988D;
+			remoteInfo = Draw;
+		};
+		A775CAB22A12C2FF0032988D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A775CA892A12C2FE0032988D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A775CA902A12C2FE0032988D;
+			remoteInfo = Draw;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		A74B41F82A729CB2009797AE /* utility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = utility.swift; sourceTree = "<group>"; };
+		A772F7972A153C5000D74521 /* Shape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shape.swift; sourceTree = "<group>"; };
+		A772F7992A17693000D74521 /* CanvasViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasViewDelegate.swift; sourceTree = "<group>"; };
+		A772F79B2A17697800D74521 /* Stroke.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stroke.swift; sourceTree = "<group>"; };
+		A772F79D2A1769B400D74521 /* Drawing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Drawing.swift; sourceTree = "<group>"; };
+		A772F79F2A176A6700D74521 /* Tool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tool.swift; sourceTree = "<group>"; };
+		A775CA912A12C2FE0032988D /* Draw.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Draw.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A775CA942A12C2FE0032988D /* DrawApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawApp.swift; sourceTree = "<group>"; };
+		A775CA992A12C2FE0032988D /* Draw.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Draw.xcdatamodel; sourceTree = "<group>"; };
+		A775CA9B2A12C2FE0032988D /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		A775CA9D2A12C2FF0032988D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A775CA9F2A12C2FF0032988D /* Draw.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Draw.entitlements; sourceTree = "<group>"; };
+		A775CAA72A12C2FF0032988D /* DrawTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DrawTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A775CAAB2A12C2FF0032988D /* DrawTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawTests.swift; sourceTree = "<group>"; };
+		A775CAB12A12C2FF0032988D /* DrawUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DrawUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A775CAB52A12C2FF0032988D /* DrawUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawUITests.swift; sourceTree = "<group>"; };
+		A775CAB72A12C2FF0032988D /* DrawUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		A775CAC42A12C39C0032988D /* CanvasView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A775CA8E2A12C2FE0032988D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A775CAA42A12C2FF0032988D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A775CAAE2A12C2FF0032988D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A775CA882A12C2FE0032988D = {
+			isa = PBXGroup;
+			children = (
+				A775CA932A12C2FE0032988D /* Draw */,
+				A775CAAA2A12C2FF0032988D /* DrawTests */,
+				A775CAB42A12C2FF0032988D /* DrawUITests */,
+				A775CA922A12C2FE0032988D /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A775CA922A12C2FE0032988D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A775CA912A12C2FE0032988D /* Draw.app */,
+				A775CAA72A12C2FF0032988D /* DrawTests.xctest */,
+				A775CAB12A12C2FF0032988D /* DrawUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A775CA932A12C2FE0032988D /* Draw */ = {
+			isa = PBXGroup;
+			children = (
+				A775CA942A12C2FE0032988D /* DrawApp.swift */,
+				A775CA9B2A12C2FE0032988D /* ContentView.swift */,
+				A775CA9D2A12C2FF0032988D /* Assets.xcassets */,
+				A775CA9F2A12C2FF0032988D /* Draw.entitlements */,
+				A775CA982A12C2FE0032988D /* Draw.xcdatamodeld */,
+				A775CAC42A12C39C0032988D /* CanvasView.swift */,
+				A772F79B2A17697800D74521 /* Stroke.swift */,
+				A772F7992A17693000D74521 /* CanvasViewDelegate.swift */,
+				A772F7972A153C5000D74521 /* Shape.swift */,
+				A772F79D2A1769B400D74521 /* Drawing.swift */,
+				A772F79F2A176A6700D74521 /* Tool.swift */,
+				A74B41F82A729CB2009797AE /* utility.swift */,
+			);
+			path = Draw;
+			sourceTree = "<group>";
+		};
+		A775CAAA2A12C2FF0032988D /* DrawTests */ = {
+			isa = PBXGroup;
+			children = (
+				A775CAAB2A12C2FF0032988D /* DrawTests.swift */,
+			);
+			path = DrawTests;
+			sourceTree = "<group>";
+		};
+		A775CAB42A12C2FF0032988D /* DrawUITests */ = {
+			isa = PBXGroup;
+			children = (
+				A775CAB52A12C2FF0032988D /* DrawUITests.swift */,
+				A775CAB72A12C2FF0032988D /* DrawUITestsLaunchTests.swift */,
+			);
+			path = DrawUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A775CA902A12C2FE0032988D /* Draw */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A775CABB2A12C2FF0032988D /* Build configuration list for PBXNativeTarget "Draw" */;
+			buildPhases = (
+				A775CA8D2A12C2FE0032988D /* Sources */,
+				A775CA8E2A12C2FE0032988D /* Frameworks */,
+				A775CA8F2A12C2FE0032988D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Draw;
+			productName = Draw;
+			productReference = A775CA912A12C2FE0032988D /* Draw.app */;
+			productType = "com.apple.product-type.application";
+		};
+		A775CAA62A12C2FF0032988D /* DrawTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A775CABE2A12C2FF0032988D /* Build configuration list for PBXNativeTarget "DrawTests" */;
+			buildPhases = (
+				A775CAA32A12C2FF0032988D /* Sources */,
+				A775CAA42A12C2FF0032988D /* Frameworks */,
+				A775CAA52A12C2FF0032988D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A775CAA92A12C2FF0032988D /* PBXTargetDependency */,
+			);
+			name = DrawTests;
+			productName = DrawTests;
+			productReference = A775CAA72A12C2FF0032988D /* DrawTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		A775CAB02A12C2FF0032988D /* DrawUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A775CAC12A12C2FF0032988D /* Build configuration list for PBXNativeTarget "DrawUITests" */;
+			buildPhases = (
+				A775CAAD2A12C2FF0032988D /* Sources */,
+				A775CAAE2A12C2FF0032988D /* Frameworks */,
+				A775CAAF2A12C2FF0032988D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A775CAB32A12C2FF0032988D /* PBXTargetDependency */,
+			);
+			name = DrawUITests;
+			productName = DrawUITests;
+			productReference = A775CAB12A12C2FF0032988D /* DrawUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A775CA892A12C2FE0032988D /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1430;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					A775CA902A12C2FE0032988D = {
+						CreatedOnToolsVersion = 14.3;
+					};
+					A775CAA62A12C2FF0032988D = {
+						CreatedOnToolsVersion = 14.3;
+						TestTargetID = A775CA902A12C2FE0032988D;
+					};
+					A775CAB02A12C2FF0032988D = {
+						CreatedOnToolsVersion = 14.3;
+						TestTargetID = A775CA902A12C2FE0032988D;
+					};
+				};
+			};
+			buildConfigurationList = A775CA8C2A12C2FE0032988D /* Build configuration list for PBXProject "Draw" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A775CA882A12C2FE0032988D;
+			packageReferences = (
+			);
+			productRefGroup = A775CA922A12C2FE0032988D /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A775CA902A12C2FE0032988D /* Draw */,
+				A775CAA62A12C2FF0032988D /* DrawTests */,
+				A775CAB02A12C2FF0032988D /* DrawUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A775CA8F2A12C2FE0032988D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A775CA9E2A12C2FF0032988D /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A775CAA52A12C2FF0032988D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A775CAAF2A12C2FF0032988D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A775CA8D2A12C2FE0032988D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A772F7982A153C5000D74521 /* Shape.swift in Sources */,
+				A775CA9A2A12C2FE0032988D /* Draw.xcdatamodeld in Sources */,
+				A775CA952A12C2FE0032988D /* DrawApp.swift in Sources */,
+				A772F79A2A17693000D74521 /* CanvasViewDelegate.swift in Sources */,
+				A772F79E2A1769B400D74521 /* Drawing.swift in Sources */,
+				A775CAC52A12C39C0032988D /* CanvasView.swift in Sources */,
+				A74B41F92A729CB2009797AE /* utility.swift in Sources */,
+				A772F7A02A176A6700D74521 /* Tool.swift in Sources */,
+				A775CA9C2A12C2FE0032988D /* ContentView.swift in Sources */,
+				A772F79C2A17697800D74521 /* Stroke.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A775CAA32A12C2FF0032988D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A775CAAC2A12C2FF0032988D /* DrawTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A775CAAD2A12C2FF0032988D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A775CAB82A12C2FF0032988D /* DrawUITestsLaunchTests.swift in Sources */,
+				A775CAB62A12C2FF0032988D /* DrawUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		A775CAA92A12C2FF0032988D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A775CA902A12C2FE0032988D /* Draw */;
+			targetProxy = A775CAA82A12C2FF0032988D /* PBXContainerItemProxy */;
+		};
+		A775CAB32A12C2FF0032988D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A775CA902A12C2FE0032988D /* Draw */;
+			targetProxy = A775CAB22A12C2FF0032988D /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		A775CAB92A12C2FF0032988D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		A775CABA2A12C2FF0032988D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+		A775CABC2A12C2FF0032988D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Draw/Draw.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "";
+				DEVELOPMENT_TEAM = K632YKP4B2;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 13.3;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.leonardo.Draw;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		A775CABD2A12C2FF0032988D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Draw/Draw.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "";
+				DEVELOPMENT_TEAM = K632YKP4B2;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 13.3;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.leonardo.Draw;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		A775CABF2A12C2FF0032988D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = K632YKP4B2;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				MACOSX_DEPLOYMENT_TARGET = 13.3;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.leonardo.DrawTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Draw.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Draw";
+			};
+			name = Debug;
+		};
+		A775CAC02A12C2FF0032988D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = K632YKP4B2;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				MACOSX_DEPLOYMENT_TARGET = 13.3;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.leonardo.DrawTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Draw.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Draw";
+			};
+			name = Release;
+		};
+		A775CAC22A12C2FF0032988D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = K632YKP4B2;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				MACOSX_DEPLOYMENT_TARGET = 13.3;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.leonardo.DrawUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Draw;
+			};
+			name = Debug;
+		};
+		A775CAC32A12C2FF0032988D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = K632YKP4B2;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				MACOSX_DEPLOYMENT_TARGET = 13.3;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.leonardo.DrawUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Draw;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A775CA8C2A12C2FE0032988D /* Build configuration list for PBXProject "Draw" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A775CAB92A12C2FF0032988D /* Debug */,
+				A775CABA2A12C2FF0032988D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A775CABB2A12C2FF0032988D /* Build configuration list for PBXNativeTarget "Draw" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A775CABC2A12C2FF0032988D /* Debug */,
+				A775CABD2A12C2FF0032988D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A775CABE2A12C2FF0032988D /* Build configuration list for PBXNativeTarget "DrawTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A775CABF2A12C2FF0032988D /* Debug */,
+				A775CAC02A12C2FF0032988D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A775CAC12A12C2FF0032988D /* Build configuration list for PBXNativeTarget "DrawUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A775CAC22A12C2FF0032988D /* Debug */,
+				A775CAC32A12C2FF0032988D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		A775CA982A12C2FE0032988D /* Draw.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				A775CA992A12C2FE0032988D /* Draw.xcdatamodel */,
+			);
+			currentVersion = A775CA992A12C2FE0032988D /* Draw.xcdatamodel */;
+			path = Draw.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = A775CA892A12C2FE0032988D /* Project object */;
+}
