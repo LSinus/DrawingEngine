@@ -9,47 +9,47 @@ import SwiftUI
 import CoreData
 
 struct ContentView: View {
-    @State var canvasView = CanvasView()
+    @State var cvc = CVContainer()
     
     var body: some View {
         NavigationView{
             ZStack{
-                DrawView(canvasView: $canvasView).modifier(AspectRatioModifier(aspectRatio: 1.5))
+                DrawView(cvContainer: $cvc).modifier(AspectRatioModifier(aspectRatio: 1.5))
             }
             .padding(10)
             .navigationBarItems(
                 leading: HStack{
                     Button {
-                        canvasView.tool = Pen(width: 5, color: .black)
+                        cvc.canvasView.tool = Pen(width: 5, color: .black)
                     }label:{
                         Image(systemName: "pencil")
                     }
                     Button {
-                        canvasView.tool = EraserVec(width: 10)
+                        cvc.canvasView.tool = EraserVec(width: 10)
                         
                     } label: {
                         Image(systemName: "eraser")
                     }
                     
                     Button {
-                        canvasView.tool = EraserBit(width: 10)
+                        cvc.canvasView.tool = EraserBit(width: 10)
                         
                     } label: {
                         Image(systemName: "eraser")
                     }
                     Button {
-                        canvasView.tool = Lasso()
+                        cvc.canvasView.tool = Lasso()
                         
                     } label: {
                         Image(systemName: "lasso")
                     }
                     Button {
-                        for stroke in canvasView.drawing.strokes{
+                        for stroke in cvc.canvasView.drawing.strokes{
                             let transform = CGAffineTransform(translationX: 10, y: 10)
                             stroke.transform = stroke.transform.concatenating(transform)
                             stroke.path.apply(transform)
                             
-                            canvasView.setNeedsDisplay()
+                            cvc.canvasView.setNeedsDisplay()
                         }
                         
                     } label: {

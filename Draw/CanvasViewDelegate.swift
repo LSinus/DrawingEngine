@@ -11,7 +11,7 @@ import UIKit
 // MARK: - Public Protocol Declarations
 
 /// SwiftyDrawView Delegate
-@objc public protocol CanvasViewDelegate: AnyObject {
+protocol CanvasViewDelegate: AnyObject {
     
     /**
      SwiftyDrawViewDelegate called when a touch gesture should begin on the SwiftyDrawView using given touch type
@@ -47,4 +47,28 @@ import UIKit
      - Parameter view: SwiftyDrawView where touches occured.
      */
     func CanvasView(didCancelDrawingIn drawingView: CanvasView, using touch: UITouch)
+}
+
+
+class Delegate: CanvasViewDelegate{
+    func CanvasView(shouldBeginDrawingIn drawingView: CanvasView, using touch: UITouch) -> Bool {
+        return true
+    }
+    
+    func CanvasView(didBeginDrawingIn drawingView: CanvasView, using touch: UITouch) {
+        print(touch.location(in: drawingView))
+        
+    }
+    
+    func CanvasView(isDrawingIn drawingView: CanvasView, using touch: UITouch) {
+        print(touch.location(in: drawingView))
+    }
+    
+    func CanvasView(didFinishDrawingIn drawingView: CanvasView, using touch: UITouch) {
+        print(touch.location(in: drawingView))
+    }
+    
+    func CanvasView(didCancelDrawingIn drawingView: CanvasView, using touch: UITouch) {
+        print(touch.location(in: drawingView))
+    }
 }

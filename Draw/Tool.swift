@@ -209,14 +209,14 @@ class Lasso: Tool{
     
     init(){
         self.type = .Lasso
-        self.width = 10
+        self.width = 3
         self.color = .systemBlue
     }
     
     func determineSelectedPaths(lassoStroke: Stroke, selectFrom drawing: Drawing) -> Drawing{
         for stroke in drawing.strokes{
             for point in stroke.pointsMove{
-                if lassoStroke.path.contains(point){
+                if lassoStroke.path.contains(point) && lassoStroke.path.bounds.contains(point){
                     
                     print(stroke.UUID)
                     let selectedStroke = selectStroke(stroke)
