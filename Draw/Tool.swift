@@ -58,19 +58,16 @@ class EraserVec: Tool{
         self.color = .white
     }
     
-    func erase(eraseLine: Stroke, eraseFrom drawing: Drawing) -> Drawing{
+    func erase(eraseLine: Stroke, eraseFrom drawing: Drawing){
         for stroke in drawing.strokes{
             if eraseLine.path.cgPath.intersects(stroke.path.cgPath){
                 drawing.removeStrokeByUUID(stroke.UUID)
             }
         }
-        
-        return drawing
     }
 }
 
 class EraserBit: Tool{
-    
     var type: ToolType
     var width: Float
     var color: UIColor
@@ -82,14 +79,12 @@ class EraserBit: Tool{
         self.color = .white
     }
     
-    func erase(eraseLine: Stroke, eraseFrom drawing: Drawing) -> Drawing{
+    func erase(eraseLine: Stroke, eraseFrom drawing: Drawing){
         var point = CGPoint()
         for stroke in drawing.strokes{
             if eraseLine.path.cgPath.intersects(stroke.path.cgPath) {
                 self.isErasing = true
                 var min = cgDistance(point1: stroke.pointsTo[0], point2: eraseLine.path.cgPath.currentPoint)
-                
-                
                 for currentP in stroke.pointsMove{
                     let transformedCurrentP = currentP.applying(stroke.transform)
                     let distance = cgDistance(point1: transformedCurrentP, point2: eraseLine.path.cgPath.currentPoint)
@@ -97,32 +92,19 @@ class EraserBit: Tool{
                         min = distance
                         point = currentP
                     }
-                    
-                    
-                    
                 }
-                print("intersect at: \(point)")
-                
-                
                 if point != CGPoint(x: 0, y: 0){
                     let newStroke = newStrokes(erasedStroke: stroke, breakPoint: point)
                     drawing.append(newStroke)
-                    
                     drawing.removeStrokeByUUID(stroke.UUID)
-                    
                     let eraserLayer = CAShapeLayer()
                     eraserLayer.path = eraseLine.path.cgPath
-                    
                 }
             }
         }
-
-        return drawing
     }
     
     func newStrokes(erasedStroke: Stroke, breakPoint: CGPoint) -> Array<Stroke>{
-        //var newStrokes: Stroke
-        
         var firstPointsMove: [CGPoint] = []
         var firstPointsTo: [CGPoint] = []
         var firstControlPoints: [CGPoint] = []
@@ -202,38 +184,140 @@ class EraserBit: Tool{
     
 }
 
+class Marker: Tool{
+    var type: ToolType
+    var width: Float
+    var color: UIColor
+    var markedStrokes: [Stroke] = []
+    
+    init(width: Float, color: UIColor){
+        self.type = .Marker
+        self.width = width
+        self.color = color.withAlphaComponent(0.5)
+    }
+    
+    private func getMarkedStrokes(_ markerStroke: Stroke, _ drawing: Drawing){
+        for stroke in drawing.strokes{
+            for point in stroke.pointsMove{
+                if markerStroke.path.contains(point.applying(stroke.transform)) && markerStroke.path.bounds.contains(point.applying(stroke.transform)) || markerStroke.path.cgPath.intersects(stroke.path.cgPath){
+                    markedStrokes.append(stroke)
+                    break
+                }
+            }
+        }
+    }
+    
+    private func insertBeforeMarked(_ markerStroke: Stroke, _ drawing: Drawing){
+        for (i, stroke) in drawing.strokes.enumerated(){
+            for markedStroke in markedStrokes{
+                if markedStroke.UUID == stroke.UUID{
+                    drawing.strokes.insert(markerStroke, at: i)
+                    markedStrokes = []
+                    return
+                }
+            }
+        }
+        
+        drawing.append(markerStroke)
+        
+    }
+    
+    func Mark(markerStroke: Stroke, markFrom drawing: Drawing){
+        getMarkedStrokes(markerStroke, drawing)
+        insertBeforeMarked(markerStroke, drawing)
+    }
+}
+
 class Lasso: Tool{
     var type: ToolType
     var width: Float
     var color: UIColor
+    var selectedStrokes: [Stroke]
+    var stroke: Stroke
+    var isTranslating = false
+    var dash = 10.0
+    var space = 10.0
     
     init(){
         self.type = .Lasso
         self.width = 3
         self.color = .systemBlue
+        self.selectedStrokes = []
+        self.stroke = Stroke()
     }
     
-    func determineSelectedPaths(lassoStroke: Stroke, selectFrom drawing: Drawing) -> Drawing{
+    func determineSelectedPaths(lassoStroke: Stroke, selectFrom drawing: Drawing) -> Int{
+        isTranslating = true
+        var numberOfSelectedStrokes = 0
         for stroke in drawing.strokes{
-            for point in stroke.pointsMove{
-                if lassoStroke.path.contains(point) && lassoStroke.path.bounds.contains(point){
+            if !stroke.isLasso{
+                for point in stroke.pointsMove{
+                    if lassoStroke.path.contains(point.applying(stroke.transform)) && lassoStroke.path.bounds.contains(point.applying(stroke.transform)){
+                        numberOfSelectedStrokes += 1
+                        self.selectedStrokes.append(stroke)
+                        self.stroke = lassoStroke
+                        break
+                    }
                     
-                    print(stroke.UUID)
-                    let selectedStroke = selectStroke(stroke)
-                    drawing.append([selectedStroke])
-                    drawing.removeStrokeByUUID(stroke.UUID)
                 }
-                    
             }
         }
         
-        return drawing
+        return numberOfSelectedStrokes
     }
     
     func selectStroke(_ stroke : Stroke) -> Stroke{
         let newStroke = Stroke(path: stroke.path, color: .red)
         
         return newStroke
+    }
+    
+    func checkTraslation(position: CGPoint){
+        if stroke.path.contains(position) && stroke.path.bounds.contains(position){
+            isTranslating = true
+            return
+        }
+        isTranslating = false
+        selectedStrokes = []
+        stroke = Stroke()
+    }
+    
+    func beginTranslatingStroke(position: CGPoint, previousPosition: CGPoint, translateFrom drawing: Drawing){
+        if stroke.path.contains(position) && stroke.path.bounds.contains(position){
+            
+            let deltaX = position.x - previousPosition.x
+            let deltaY = position.y - previousPosition.y
+            
+            let transform = CGAffineTransform(translationX: deltaX, y: deltaY)
+            
+            stroke.apply(transform)
+            
+            for selectedStroke in selectedStrokes {
+                drawing.translateStroke(UUID: selectedStroke.UUID, translateWith: transform)
+            }
+        }
+        
+        else{
+            isTranslating = false
+            selectedStrokes = []
+        }
+    }
+    
+    func translateStroke(position: CGPoint, previousPosition: CGPoint, translateFrom drawing: Drawing){
+        let deltaX = position.x - previousPosition.x
+        let deltaY = position.y - previousPosition.y
+        
+        let transform = CGAffineTransform(translationX: deltaX, y: deltaY)
+        
+        stroke.apply(transform)
+        
+        for selectedStroke in selectedStrokes {
+            drawing.translateStroke(UUID: selectedStroke.UUID, translateWith: transform)
+        }
+    }
+    
+    func calculateDashSize(vel: CGFloat){
+        space = 10 * vel
     }
     
 }

@@ -14,7 +14,7 @@ struct ContentView: View {
     var body: some View {
         NavigationView{
             ZStack{
-                DrawView(cvContainer: $cvc).modifier(AspectRatioModifier(aspectRatio: 1.5))
+                DrawView(cvContainer: $cvc)
             }
             .padding(10)
             .navigationBarItems(
@@ -23,6 +23,11 @@ struct ContentView: View {
                         cvc.canvasView.tool = Pen(width: 5, color: .black)
                     }label:{
                         Image(systemName: "pencil")
+                    }
+                    Button {
+                        cvc.canvasView.tool = Marker(width: 30, color: .yellow)
+                    }label:{
+                        Image(systemName: "highlighter")
                     }
                     Button {
                         cvc.canvasView.tool = EraserVec(width: 10)
@@ -39,18 +44,6 @@ struct ContentView: View {
                     }
                     Button {
                         cvc.canvasView.tool = Lasso()
-                        
-                    } label: {
-                        Image(systemName: "lasso")
-                    }
-                    Button {
-                        for stroke in cvc.canvasView.drawing.strokes{
-                            let transform = CGAffineTransform(translationX: 10, y: 10)
-                            stroke.transform = stroke.transform.concatenating(transform)
-                            stroke.path.apply(transform)
-                            
-                            cvc.canvasView.setNeedsDisplay()
-                        }
                         
                     } label: {
                         Image(systemName: "lasso")

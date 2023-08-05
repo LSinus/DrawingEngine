@@ -8,20 +8,6 @@
 import Foundation
 import UIKit
 
-protocol AbstractStroke{
-    var path: UIBezierPath {
-        get
-        set
-    }
-    var color: UIColor{
-        get
-        set
-    }
-    func draw()
-    
-    func draw(with: Tool)
-}
-
 class Stroke{
     var UUID: String
     var path: UIBezierPath
@@ -123,17 +109,20 @@ class Stroke{
     }
     
     func draw(with tool: Tool){
-        if(tool.type == .Lasso){
+        self.isLasso = false
+        self.path.setLineDash([], count: 0, phase: 0.0)
+        if let lasso = tool as? Lasso{
             self.isLasso = true
-            if let _ = tool as? Lasso{
-                self.path.setLineDash([5, 2], count: 2, phase: 0.0)
-            }
+            self.path.setLineDash([lasso.dash, lasso.space], count: 2, phase: 0.0)
         }
-        
         self.path.lineWidth = CGFloat(tool.width)
         self.color = tool.color
         draw()
-        
+    }
+    
+    func apply(_ withTransfrom: CGAffineTransform){
+        self.transform = self.transform.concatenating(withTransfrom)
+        self.path.apply(withTransfrom)
     }
     
     func constructByPoints(){
@@ -142,7 +131,6 @@ class Stroke{
             path.move(to: pointsMove[i+1])
             path.addQuadCurve(to: pointsTo[i], controlPoint: controlPoints[i])
         }
-        print(transform)
         path.apply(self.transform)
     }
     

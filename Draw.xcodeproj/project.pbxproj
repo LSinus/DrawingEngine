@@ -21,6 +21,7 @@
 		A775CAB62A12C2FF0032988D /* DrawUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A775CAB52A12C2FF0032988D /* DrawUITests.swift */; };
 		A775CAB82A12C2FF0032988D /* DrawUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A775CAB72A12C2FF0032988D /* DrawUITestsLaunchTests.swift */; };
 		A775CAC52A12C39C0032988D /* CanvasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A775CAC42A12C39C0032988D /* CanvasView.swift */; };
+		A7A8C3142A7D052500F56A15 /* UIScrollViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A8C3132A7D052500F56A15 /* UIScrollViewDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,6 +60,7 @@
 		A775CAB52A12C2FF0032988D /* DrawUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawUITests.swift; sourceTree = "<group>"; };
 		A775CAB72A12C2FF0032988D /* DrawUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		A775CAC42A12C39C0032988D /* CanvasView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasView.swift; sourceTree = "<group>"; };
+		A7A8C3132A7D052500F56A15 /* UIScrollViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIScrollViewDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,6 +91,7 @@
 		A775CA882A12C2FE0032988D = {
 			isa = PBXGroup;
 			children = (
+				A7A8C3132A7D052500F56A15 /* UIScrollViewDelegate.swift */,
 				A775CA932A12C2FE0032988D /* Draw */,
 				A775CAAA2A12C2FF0032988D /* DrawTests */,
 				A775CAB42A12C2FF0032988D /* DrawUITests */,
@@ -280,6 +283,7 @@
 				A772F79E2A1769B400D74521 /* Drawing.swift in Sources */,
 				A775CAC52A12C39C0032988D /* CanvasView.swift in Sources */,
 				A74B41F92A729CB2009797AE /* utility.swift in Sources */,
+				A7A8C3142A7D052500F56A15 /* UIScrollViewDelegate.swift in Sources */,
 				A772F7A02A176A6700D74521 /* Tool.swift in Sources */,
 				A775CA9C2A12C2FE0032988D /* ContentView.swift in Sources */,
 				A772F79C2A17697800D74521 /* Stroke.swift in Sources */,

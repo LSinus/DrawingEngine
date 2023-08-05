@@ -8,15 +8,7 @@
 import Foundation
 import UIKit
 
-protocol AbstractDrawing{
-    var strokes: [Stroke]{
-        get
-        set
-    }
-    func append(_ newElements: [Stroke])
-}
-
-class Drawing: AbstractDrawing{
+class Drawing{
     var strokes: [Stroke]
     
     init(){
@@ -36,22 +28,30 @@ class Drawing: AbstractDrawing{
         }
     }
     
+    func append(_ newElment: Stroke) {
+        self.strokes.append(newElment)
+    }
+    
     func removeStrokeByUUID(_ UUID: String){
-        var newStrokes: [Stroke] = []
-        
-        for i in 0..<strokes.count {
-            if(strokes[i].UUID != UUID){
-                newStrokes.append(strokes[i])
+        for (i, stroke) in strokes.enumerated(){
+            if(stroke.UUID == UUID){
+                strokes.remove(at: i)
             }
         }
-        
-        self.strokes = newStrokes
     }
     
     func removeLassoStrokes(){
         for stroke in self.strokes{
             if stroke.isLasso{
                 removeStrokeByUUID(stroke.UUID)
+            }
+        }
+    }
+    
+    func translateStroke(UUID: String, translateWith transform: CGAffineTransform){
+        for stroke in strokes{
+            if(stroke.UUID == UUID){
+                stroke.apply(transform)
             }
         }
     }

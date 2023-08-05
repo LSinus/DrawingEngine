@@ -16,7 +16,6 @@ protocol ShapeProtocol{
 class Rect: ShapeProtocol{
     
     func draw(){
-        print("rectangle")
     }
     func edit(){
         
