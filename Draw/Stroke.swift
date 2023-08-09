@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class Stroke{
+class Stroke: Hashable{
     var UUID: String
     var path: UIBezierPath
     var pointsMove: [CGPoint]
@@ -32,7 +32,7 @@ class Stroke{
     
     init(path: UIBezierPath){
         self.UUID = NSUUID().uuidString
-        self.path = path
+        self.path = UIBezierPath(cgPath: path.cgPath)
         self.pointsMove = []
         self.pointsTo = []
         self.controlPoints = []
@@ -48,20 +48,25 @@ class Stroke{
     
     init(path: UIBezierPath, color: UIColor){
         self.UUID = NSUUID().uuidString
-        self.path = path
+        self.path = UIBezierPath(cgPath: path.cgPath)
         self.pointsMove = []
         self.pointsTo = []
         self.controlPoints = []
         self.path.lineWidth = 5
         self.color = color
         getPointFromPath()
-//
-//        print(path)
-//
-//        print("PointsMove \(pointsMove)")
-//        print("PointsTo \(pointsTo)")
-//        print("ControlPoints \(controlPoints)")
-//        print("pointsMove: \(pointsMove.count), pointsTo: \(pointsTo.count), controlPoints: \(controlPoints.count)")
+    }
+    
+    init(path: UIBezierPath, color: UIColor, transform: CGAffineTransform){
+        self.UUID = NSUUID().uuidString
+        self.path = UIBezierPath(cgPath: path.cgPath)
+        self.pointsMove = []
+        self.pointsTo = []
+        self.controlPoints = []
+        self.path.lineWidth = 5
+        self.color = color
+        self.transform = transform
+        getPointFromPath()
     }
     
     
@@ -102,6 +107,19 @@ class Stroke{
         
     }
     
+    static func ==(lhs: Stroke, rhs: Stroke) -> Bool {
+        return lhs.UUID == rhs.UUID
+    }
+    
+    func hash(into hasher: inout Hasher){
+        hasher.combine(UUID)
+    }
+    
+    func copy() -> Stroke{
+        let copy = Stroke(path: self.path, color: self.color, transform: self.transform)
+        copy.path.lineWidth = self.path.lineWidth
+        return copy
+    }
     
     func draw(){
         color.setStroke()
@@ -120,9 +138,9 @@ class Stroke{
         draw()
     }
     
-    func apply(_ withTransfrom: CGAffineTransform){
-        self.transform = self.transform.concatenating(withTransfrom)
-        self.path.apply(withTransfrom)
+    func apply(_ transfrom: CGAffineTransform){
+        self.transform = self.transform.concatenating(transfrom)
+        self.path.apply(transfrom)
     }
     
     func constructByPoints(){

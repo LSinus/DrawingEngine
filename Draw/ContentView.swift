@@ -20,16 +20,25 @@ struct ContentView: View {
             .navigationBarItems(
                 leading: HStack{
                     Button {
+                        SelectionMenuView.selectionMenu.resetMenu()
+                        cvc.canvasView.drawing.removeLassoStrokes()
+                        cvc.canvasView.setNeedsDisplay()
                         cvc.canvasView.tool = Pen(width: 5, color: .black)
                     }label:{
                         Image(systemName: "pencil")
                     }
                     Button {
+                        SelectionMenuView.selectionMenu.resetMenu()
+                        cvc.canvasView.drawing.removeLassoStrokes()
+                        cvc.canvasView.setNeedsDisplay()
                         cvc.canvasView.tool = Marker(width: 30, color: .yellow)
                     }label:{
                         Image(systemName: "highlighter")
                     }
                     Button {
+                        SelectionMenuView.selectionMenu.resetMenu()
+                        cvc.canvasView.drawing.removeLassoStrokes()
+                        cvc.canvasView.setNeedsDisplay()
                         cvc.canvasView.tool = EraserVec(width: 10)
                         
                     } label: {
@@ -37,12 +46,18 @@ struct ContentView: View {
                     }
                     
                     Button {
+                        SelectionMenuView.selectionMenu.resetMenu()
+                        cvc.canvasView.drawing.removeLassoStrokes()
+                        cvc.canvasView.setNeedsDisplay()
                         cvc.canvasView.tool = EraserBit(width: 10)
                         
                     } label: {
                         Image(systemName: "eraser")
                     }
                     Button {
+                        SelectionMenuView.selectionMenu.resetMenu()
+                        cvc.canvasView.drawing.removeLassoStrokes()
+                        cvc.canvasView.setNeedsDisplay()
                         cvc.canvasView.tool = Lasso()
                         
                     } label: {

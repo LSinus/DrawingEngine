@@ -256,6 +256,7 @@ class Lasso: Tool{
                         numberOfSelectedStrokes += 1
                         self.selectedStrokes.append(stroke)
                         self.stroke = lassoStroke
+                        SelectionMenuView.selectionMenu.setMenuOptions(options: SelectionMenuView.selectionMenu.standardOptions)
                         break
                     }
                     
@@ -277,9 +278,16 @@ class Lasso: Tool{
             isTranslating = true
             return
         }
+        if selectedStrokes.count > 0 && SelectionMenuView.selectionMenu.menuOptions == SelectionMenuView.selectionMenu.pasteOptions{
+            SelectionMenuView.selectionMenu.useMenu(atPoint: position)
+            isTranslating = false
+            stroke = Stroke()
+            return
+        }
         isTranslating = false
         selectedStrokes = []
         stroke = Stroke()
+        SelectionMenuView.selectionMenu.resetMenu()
     }
     
     func beginTranslatingStroke(position: CGPoint, previousPosition: CGPoint, translateFrom drawing: Drawing){
@@ -294,6 +302,7 @@ class Lasso: Tool{
             
             for selectedStroke in selectedStrokes {
                 drawing.translateStroke(UUID: selectedStroke.UUID, translateWith: transform)
+                
             }
         }
         
@@ -313,11 +322,18 @@ class Lasso: Tool{
         
         for selectedStroke in selectedStrokes {
             drawing.translateStroke(UUID: selectedStroke.UUID, translateWith: transform)
+            
         }
     }
     
     func calculateDashSize(vel: CGFloat){
         space = 10 * vel
+    }
+    
+    func deleteStroke(removeFrom drawing: Drawing){
+        for stroke in selectedStrokes{
+            drawing.removeStrokeByUUID(stroke.UUID)
+        }
     }
     
 }

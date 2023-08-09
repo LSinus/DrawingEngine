@@ -34,6 +34,12 @@ protocol CanvasViewDelegate: AnyObject{
     func CanvasView(didFinishDrawingIn canvasView: CanvasView, using touch: UITouch)
     
     func getActualStroke() -> Stroke
+    
+    func CanvasView(didBeginTappingIn canvasView: CanvasView, using touch: UITouch)
+    
+    func CanvasView(isTappingIn canvasView: CanvasView, using touch: UITouch)
+    
+    func CanvasView(didFinishTappingIn canvasView: CanvasView, using touch: UITouch)
 }
 
 
@@ -44,14 +50,15 @@ class CVDelegate: CanvasViewDelegate{
     var previousPrevious = CGPoint()
     var time = Date()
     var previousTime = Date()
+    let selectionMenu = SelectionMenuView.selectionMenu
     
     func CanvasView(didBeginDrawingIn canvasView: CanvasView, using touch: UITouch) {
         if let lasso = canvasView.tool as? Lasso{
             lasso.checkTraslation(position: touch.location(in: canvasView))
             
             if lasso.isTranslating{
-                let popup = Popup(frame: CGRect(x:touch.location(in: canvasView).x-100, y:touch.location(in: canvasView).y-100, width: 200, height: 50))
-                canvasView.addSubview(popup)
+                selectionMenu.useMenu(atPoint: touch.location(in: canvasView))
+                canvasView.addSubview(selectionMenu)
                 lasso.beginTranslatingStroke(position: touch.location(in: canvasView), previousPosition: touch.previousLocation(in: canvasView), translateFrom: canvasView.drawing)
                 canvasView.drawing.removeLassoStrokes()
                 return
@@ -183,5 +190,59 @@ class CVDelegate: CanvasViewDelegate{
         let velocity = distance / timeInterval
         
         return velocity
+    }
+    
+    func CanvasView(didBeginTappingIn canvasView: CanvasView, using touch: UITouch){
+        if SelectionMenuView.selectionMenu.copy.count > 0{
+            SelectionMenuView.selectionMenu.useMenu(atPoint: touch.location(in: canvasView))
+        }
+        
+        
+        if let lasso = canvasView.tool as? Lasso{
+//            lasso.checkTraslation(position: touch.location(in: canvasView))
+//
+//            if lasso.isTranslating{
+//
+//                lasso.beginTranslatingStroke(position: touch.location(in: canvasView), previousPosition: touch.previousLocation(in: canvasView), translateFrom: canvasView.drawing)
+//                canvasView.drawing.removeLassoStrokes()
+//                return
+//            }
+        }
+    }
+    
+    func CanvasView(isTappingIn canvasView: CanvasView, using touch: UITouch){
+//        if let lasso = canvasView.tool as? Lasso{
+//            if lasso.isTranslating{
+//                lasso.translateStroke(position: touch.location(in: canvasView), previousPosition: touch.previousLocation(in: canvasView), translateFrom: canvasView.drawing)
+//                RenderCanvas(canvasView)
+//                return
+//            }
+//
+//            //lasso.calculateDashSize(vel: vel)
+//        }
+    }
+    
+    func CanvasView(didFinishTappingIn canvasView: CanvasView, using touch: UITouch) {
+//        if let lasso = canvasView.tool as? Lasso{
+//            if lasso.isTranslating{
+//                canvasView.drawing.append([lasso.stroke])
+//            }
+//            else{
+//                if tempStroke.pointsMove.count > 0{
+//                    //closing tempStroke
+//                    tempStroke.path.move(to: tempStroke.path.cgPath.currentPoint)
+//                    tempStroke.path.addLine(to: tempStroke.pointsMove[0])
+//
+//                    //determine selected paths
+//                    let numberOfSelectedStrokes = lasso.determineSelectedPaths(lassoStroke: tempStroke, selectFrom: canvasView.drawing)
+//                    if numberOfSelectedStrokes != 0 {
+//                        canvasView.drawing.strokes.append(tempStroke)
+//                    }
+//                }
+//            }
+//            tempStroke = Stroke()
+//            RenderCanvas(canvasView)
+//            return
+//        }
     }
 }
