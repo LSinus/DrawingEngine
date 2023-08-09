@@ -278,7 +278,7 @@ class Lasso: Tool{
             isTranslating = true
             return
         }
-        if selectedStrokes.count > 0 && SelectionMenuView.selectionMenu.menuOptions == SelectionMenuView.selectionMenu.pasteOptions{
+        if SelectionMenuView.selectionMenu.copy.count > 0 && SelectionMenuView.selectionMenu.menuOptions == SelectionMenuView.selectionMenu.pasteOptions{
             SelectionMenuView.selectionMenu.useMenu(atPoint: position)
             isTranslating = false
             stroke = Stroke()

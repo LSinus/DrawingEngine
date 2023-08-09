@@ -228,6 +228,7 @@ class SMVDelegate: SelectionMenuViewDelegate{
                 let translation = calculateTranslationBetweenPoints(from: lassoStrokeCenter, to: strokeCenter)
                 SelectionMenuView.selectionMenu.copy[stroke] = translation
             }
+            lasso.selectedStrokes = []
             
         }
         SelectionMenuView.selectionMenu.setMenuOptions(options: SelectionMenuView.selectionMenu.pasteOptions)
