@@ -116,8 +116,7 @@ class Stroke: Hashable{
     }
     
     func copy() -> Stroke{
-        let copy = Stroke(path: self.path, color: self.color, transform: self.transform)
-        copy.path.lineWidth = self.path.lineWidth
+        let copy = Stroke(pointsMove: self.pointsMove, pointsTo: self.pointsTo, controlPoints: self.controlPoints, lineWidth: self.path.lineWidth, color: self.color, transform: self.transform)
         return copy
     }
     

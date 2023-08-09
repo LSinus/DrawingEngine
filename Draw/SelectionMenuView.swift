@@ -274,14 +274,15 @@ class SMVDelegate: SelectionMenuViewDelegate{
             lasso.selectedStrokes = duplicateStrokes
             canvasView.drawing.append(lasso.stroke)
         }
-        //SelectionMenuView.selectionMenu.resetMenu()
+        SelectionMenuView.selectionMenu.resetMenu()
         SelectionMenuView.selectionMenu.setMenuOptions(options: SelectionMenuView.selectionMenu.standardOptions)
         canvasView.setNeedsDisplay()
     }
     
     func shiftForDuplication(){
-        SelectionMenuView.selectionMenu.currentPosition = CGPoint(x: SelectionMenuView.selectionMenu.currentPosition.x + 10, y: SelectionMenuView.selectionMenu.currentPosition.y + 10)
         if let lasso = canvasView.tool as? Lasso{
+            SelectionMenuView.selectionMenu.currentPosition = calculateCenterOfStroke(stroke: lasso.stroke)
+            SelectionMenuView.selectionMenu.currentPosition = CGPoint(x: SelectionMenuView.selectionMenu.currentPosition.x + 10, y: SelectionMenuView.selectionMenu.currentPosition.y + 10)
             lasso.stroke.apply(CGAffineTransform(translationX: 10, y: 10))
         }
     }
