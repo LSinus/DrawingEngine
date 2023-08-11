@@ -9,7 +9,7 @@ import UIKit
 
 class SelectionMenuView: UIView {
     
-    static let selectionMenu = SelectionMenuView(frame: CGRect(x: 0, y: 0, width: 400, height: 50))
+    static let selectionMenu = SelectionMenuView(frame: CGRect(x: 0, y: 0, width: 300, height: 50))
     
     private var collectionView: UICollectionView!
     var menuOptions: [String] = []
@@ -19,19 +19,13 @@ class SelectionMenuView: UIView {
     
     var currentPosition : CGPoint = .zero
     
-    public var copy : [Stroke: CGAffineTransform] = [:]
+    public var copy = [(stroke: Stroke, transform: CGAffineTransform)]()
     
     weak var delegate: SelectionMenuViewDelegate?
 
     override private init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()
-        if copy.count == 0 {
-            setMenuOptions(options: standardOptions)
-        }
-        else {
-            setMenuOptions(options: pasteOptions)
-        }
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -40,7 +34,6 @@ class SelectionMenuView: UIView {
     }
 
     private func commonInit() {
-        // Configura la UICollectionView e il layout
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         collectionView = UICollectionView(frame: bounds, collectionViewLayout: layout)
@@ -48,14 +41,22 @@ class SelectionMenuView: UIView {
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.showsHorizontalScrollIndicator = false
-
-        // Registra la cella personalizzata per gli elementi del menu
         collectionView.register(MenuOptionCell.self, forCellWithReuseIdentifier: "MenuOptionCell")
         
-        collectionView.backgroundColor = .clear // Sfondo trasparente
-        collectionView.contentInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16) // Margine sinistro e destro
+        collectionView.backgroundColor = .clear
+        collectionView.layer.borderColor = UIColor.black.cgColor
+        collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
 
         addSubview(collectionView)
+        
+        if copy.count == 0 {
+            setMenuOptions(options: standardOptions)
+        }
+        else {
+            setMenuOptions(options: pasteOptions)
+        }
+        self.isHidden = true
+        
     }
 
     func setMenuOptions(options: [String]) {
@@ -66,7 +67,7 @@ class SelectionMenuView: UIView {
     func resetMenu(){
         isPresented = true
         UIView.animate(withDuration: 0.2) {
-            
+            SelectionMenuView.selectionMenu.transform = CGAffineTransform(translationX: 0, y: 0)
             SelectionMenuView.selectionMenu.transform = SelectionMenuView.selectionMenu.transform.concatenating(CGAffineTransform(scaleX: 0, y: 0))
         }
         SelectionMenuView.selectionMenu.isHidden = true
@@ -76,10 +77,13 @@ class SelectionMenuView: UIView {
     func useMenu(atPoint: CGPoint){
         if isPresented {
             SelectionMenuView.selectionMenu.isHidden = false
-                let translate = CGAffineTransform(translationX: atPoint.x, y: atPoint.y)
-                let scale = CGAffineTransform(scaleX: 1, y: 1)
-                
-            let combined = translate.concatenating(scale)
+            //print("atpoint: \(atPoint)")
+            let translate = CGAffineTransform(translationX: atPoint.x, y: atPoint.y)
+            var scale = CGAffineTransform(scaleX: 1, y: 1)
+            if let canvasScale = delegate?.getCanvasScaleFactor(){
+                scale = CGAffineTransform(scaleX: 1.5/canvasScale, y: 1.5/canvasScale)
+            }
+            let combined = scale.concatenating(translate)
             
             UIView.animate(withDuration: 0.2) {
                 SelectionMenuView.selectionMenu.transform = combined
@@ -156,25 +160,27 @@ class MenuOptionCell: UICollectionViewCell {
     }
 
     private func commonInit() {
-        // Configura l'etichetta del titolo
         titleLabel.textAlignment = .center
-        titleLabel.textColor = .white // Colore del testo
-        titleLabel.font = UIFont.systemFont(ofSize: 16, weight: .semibold) // Font del testo
+        titleLabel.textColor = .white
+        titleLabel.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         addSubview(titleLabel)
 
-        // Aggiungi i layout constraints per centrare l'etichetta nel contenitore della cella
+       
         NSLayoutConstraint.activate([
             titleLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
             titleLabel.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
 
-        // Applica uno stile grafico alla cella
-        layer.cornerRadius = 8 // Bordi arrotondati
-        layer.borderWidth = 1 // Spessore del bordo
-        layer.borderColor = UIColor.black.cgColor // Colore del bordo
-        layer.masksToBounds = true // Per mascherare i contenuti oltre i bordi arrotondati
-        backgroundColor = UIColor.gray // Colore di sfondo della cella
+        layer.shadowColor = UIColor.black.cgColor
+        layer.shadowOpacity = 1
+        layer.shadowOffset = CGSize(width: 0, height:0)
+        layer.shadowRadius = 4
+        layer.cornerRadius = 8
+        layer.borderWidth = 1
+        layer.borderColor = UIColor.black.cgColor
+        layer.masksToBounds = true
+        backgroundColor = UIColor.gray
     }
 
     override func layoutSubviews() {
@@ -200,6 +206,8 @@ protocol SelectionMenuViewDelegate: AnyObject{
     func cut()
     func duplicate()
     func style()
+    
+    func getCanvasScaleFactor() -> CGFloat
 }
 
 class SMVDelegate: SelectionMenuViewDelegate{
@@ -213,20 +221,26 @@ class SMVDelegate: SelectionMenuViewDelegate{
         if let lasso = canvasView.tool as? Lasso{
             lasso.deleteStroke(removeFrom: canvasView.drawing)
         }
+        if SelectionMenuView.selectionMenu.copy.count > 0 {
+            for element in SelectionMenuView.selectionMenu.copy{
+                canvasView.drawing.removeStrokeByUUID(element.stroke.UUID)
+            }
+        }
         canvasView.drawing.removeLassoStrokes()
         SelectionMenuView.selectionMenu.resetMenu()
         canvasView.setNeedsDisplay()
     }
     
     func copy(){
-        SelectionMenuView.selectionMenu.copy = [:]
+        SelectionMenuView.selectionMenu.copy = []
         if let lasso = canvasView.tool as? Lasso{
             let lassoStrokeCenter = calculateCenterOfStroke(stroke: lasso.stroke)
             for stroke in lasso.selectedStrokes{
                 let strokeCenter = calculateCenterOfStroke(stroke: stroke)
                 
                 let translation = calculateTranslationBetweenPoints(from: lassoStrokeCenter, to: strokeCenter)
-                SelectionMenuView.selectionMenu.copy[stroke] = translation
+                let element = (stroke, translation)
+                SelectionMenuView.selectionMenu.copy.append(element)
             }
             lasso.selectedStrokes = []
             
@@ -240,15 +254,13 @@ class SMVDelegate: SelectionMenuViewDelegate{
     func paste() -> [Stroke]{
         var newStrokes : [Stroke] = []
         
-        for copiedStroke in SelectionMenuView.selectionMenu.copy.keys{
-            let stroke = copiedStroke.copy()
+        for copiedElement in SelectionMenuView.selectionMenu.copy{
+            let stroke = copiedElement.stroke.copy()
             
             let center = calculateCenterOfStroke(stroke: stroke)
             
             var transform = calculateTranslationBetweenPoints(from: center, to: SelectionMenuView.selectionMenu.currentPosition)
-            if let shiftTranslation = SelectionMenuView.selectionMenu.copy[copiedStroke]{
-                transform = transform.concatenating(shiftTranslation)
-            }
+            transform = transform.concatenating(copiedElement.transform)
             
             stroke.apply(transform)
             canvasView.drawing.append(stroke)
@@ -297,5 +309,9 @@ class SMVDelegate: SelectionMenuViewDelegate{
         canvasView.drawing.removeLassoStrokes()
         SelectionMenuView.selectionMenu.resetMenu()
         canvasView.setNeedsDisplay()
+    }
+    
+    func getCanvasScaleFactor() -> CGFloat {
+        return canvasView.contentScaleFactor
     }
 }

@@ -10,18 +10,22 @@ import UIKit
 
 open class CVContainer: UIView{
     
+    static var cvContainer = CVContainer()
+    
     let canvasView = CanvasView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 5000))
     let selectionMenuViewDelegate: SMVDelegate
     let canvasViewDelegate = CVDelegate()
     let scrollViewDelegate: UISCVDelegate
     var scrollView: UIScrollView!
     
-    override public init(frame: CGRect) {
+    override private init(frame: CGRect) {
         self.scrollViewDelegate = UISCVDelegate(canvasView)
         self.selectionMenuViewDelegate = SMVDelegate(canvasView)
+        UndoManager.undoManager.assignView(canvasView)
         SelectionMenuView.selectionMenu.delegate = selectionMenuViewDelegate
         super.init(frame: frame)
         self.canvasView.delegate = canvasViewDelegate
+        self.canvasView.addSubview(SelectionMenuView.selectionMenu)
         self.backgroundColor = .clear
         setupScrollView()
         //setupGestureRecognizers()
@@ -31,6 +35,7 @@ open class CVContainer: UIView{
     required public init?(coder aDecoder: NSCoder) {
         self.scrollViewDelegate = UISCVDelegate(canvasView)
         self.selectionMenuViewDelegate = SMVDelegate(canvasView)
+        UndoManager.undoManager.assignView(canvasView)
         SelectionMenuView.selectionMenu.delegate = selectionMenuViewDelegate
         super.init(coder: aDecoder)
         self.canvasView.delegate = canvasViewDelegate

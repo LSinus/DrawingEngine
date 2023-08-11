@@ -30,6 +30,8 @@ protocol Tool{
         get
         set
     }
+    
+    func copy() -> Tool
 }
 
 class Pen: Tool{
@@ -42,6 +44,10 @@ class Pen: Tool{
         self.type = .Pen
         self.width = width
         self.color = color
+    }
+    
+    func copy() -> Tool {
+        return Pen(width: self.width, color: self.color)
     }
     
 }
@@ -64,6 +70,10 @@ class EraserVec: Tool{
                 drawing.removeStrokeByUUID(stroke.UUID)
             }
         }
+    }
+    
+    func copy() -> Tool {
+        return EraserVec(width: self.width)
     }
 }
 
@@ -182,6 +192,10 @@ class EraserBit: Tool{
         return strokes
     }
     
+    func copy() -> Tool {
+        return EraserBit(width: self.width)
+    }
+    
 }
 
 class Marker: Tool{
@@ -194,6 +208,13 @@ class Marker: Tool{
         self.type = .Marker
         self.width = width
         self.color = color.withAlphaComponent(0.5)
+    }
+    
+    init(width: Float, color: UIColor, markedStrokes: [Stroke]){
+        self.type = .Marker
+        self.width = width
+        self.color = color.withAlphaComponent(0.5)
+        self.markedStrokes = markedStrokes
     }
     
     private func getMarkedStrokes(_ markerStroke: Stroke, _ drawing: Drawing){
@@ -226,6 +247,10 @@ class Marker: Tool{
         getMarkedStrokes(markerStroke, drawing)
         insertBeforeMarked(markerStroke, drawing)
     }
+    
+    func copy() -> Tool {
+        return Marker(width: self.width, color: self.color, markedStrokes: self.markedStrokes)
+    }
 }
 
 class Lasso: Tool{
@@ -244,6 +269,15 @@ class Lasso: Tool{
         self.color = .systemBlue
         self.selectedStrokes = []
         self.stroke = Stroke()
+    }
+    
+    init(stroke: Stroke, seletedStrokes: [Stroke], isTraslating: Bool){
+        self.type = .Lasso
+        self.width = 3
+        self.color = .systemBlue
+        self.stroke = stroke
+        self.selectedStrokes = seletedStrokes
+        self.isTranslating = isTraslating
     }
     
     func determineSelectedPaths(lassoStroke: Stroke, selectFrom drawing: Drawing) -> Int{
@@ -334,6 +368,10 @@ class Lasso: Tool{
         for stroke in selectedStrokes{
             drawing.removeStrokeByUUID(stroke.UUID)
         }
+    }
+    
+    func copy() -> Tool {
+        return Lasso(stroke: self.stroke, seletedStrokes: self.selectedStrokes, isTraslating: self.isTranslating)
     }
     
 }

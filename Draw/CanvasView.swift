@@ -19,7 +19,6 @@ open class CanvasView: UIView{
     
     /// Public init(frame:) implementation
     override public init(frame: CGRect) {
-
         self.drawing = Drawing()
         self.tool = Pen(width: 3, color: .red)
         super.init(frame: frame)
@@ -35,10 +34,19 @@ open class CanvasView: UIView{
         super.init(coder: aDecoder)
         self.backgroundColor = .clear
     }
+    
+    init(frame: CGRect, drawing: Drawing, tool: Tool){
+        self.drawing = drawing
+        self.tool = tool
+        super.init(frame: frame)
+        self.backgroundColor = .clear
+        self.layer.borderWidth = 2.0
+        self.layer.borderColor = UIColor.red.cgColor
+    }
 
     override open func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         touches.forEach { touch in
-            print("touch Position: \(touch.location(in: self))")
+            //print("touch Position: \(touch.location(in: self))")
             
             if(touch.type == .pencil){
                 delegate?.CanvasView(didBeginDrawingIn: self, using: touch)
@@ -64,10 +72,13 @@ open class CanvasView: UIView{
         touches.forEach { touch in
             if(touch.type == .pencil){
                 delegate?.CanvasView(didFinishDrawingIn: self, using: touch)
+                UndoManager.undoManager.performAction()
             }
             else{
                 delegate?.CanvasView(didFinishTappingIn: self, using: touch)
             }
+            
+            
         }
     }
     
@@ -89,5 +100,12 @@ open class CanvasView: UIView{
                 stroke.draw()
             }
         }
+    }
+    
+    func copyCanvas() -> CanvasView{
+        let copiedDrawing = drawing.copy()
+        let copiedTool = tool.copy()
+        
+        return CanvasView(frame: self.frame, drawing: copiedDrawing, tool: copiedTool)
     }
 }

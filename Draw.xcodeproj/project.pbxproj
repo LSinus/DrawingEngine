@@ -24,6 +24,7 @@
 		A7A8C3142A7D052500F56A15 /* UIScrollViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A8C3132A7D052500F56A15 /* UIScrollViewDelegate.swift */; };
 		A7A8C3162A7E3E4A00F56A15 /* CanvasViewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A8C3152A7E3E4A00F56A15 /* CanvasViewContainer.swift */; };
 		A7A8C31A2A7FDDAD00F56A15 /* SelectionMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A8C3192A7FDDAD00F56A15 /* SelectionMenuView.swift */; };
+		A7FBC3CE2A84F1CD0061B5F0 /* UndoManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7FBC3CD2A84F1CD0061B5F0 /* UndoManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,6 +66,7 @@
 		A7A8C3132A7D052500F56A15 /* UIScrollViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIScrollViewDelegate.swift; sourceTree = "<group>"; };
 		A7A8C3152A7E3E4A00F56A15 /* CanvasViewContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasViewContainer.swift; sourceTree = "<group>"; };
 		A7A8C3192A7FDDAD00F56A15 /* SelectionMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectionMenuView.swift; sourceTree = "<group>"; };
+		A7FBC3CD2A84F1CD0061B5F0 /* UndoManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UndoManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -118,6 +120,7 @@
 				A775CA942A12C2FE0032988D /* DrawApp.swift */,
 				A775CA9B2A12C2FE0032988D /* ContentView.swift */,
 				A7A8C3192A7FDDAD00F56A15 /* SelectionMenuView.swift */,
+				A7FBC3CD2A84F1CD0061B5F0 /* UndoManager.swift */,
 				A7A8C3132A7D052500F56A15 /* UIScrollViewDelegate.swift */,
 				A7A8C3152A7E3E4A00F56A15 /* CanvasViewContainer.swift */,
 				A775CAC42A12C39C0032988D /* CanvasView.swift */,
@@ -291,6 +294,7 @@
 				A74B41F92A729CB2009797AE /* utility.swift in Sources */,
 				A7A8C3142A7D052500F56A15 /* UIScrollViewDelegate.swift in Sources */,
 				A772F7A02A176A6700D74521 /* Tool.swift in Sources */,
+				A7FBC3CE2A84F1CD0061B5F0 /* UndoManager.swift in Sources */,
 				A775CA9C2A12C2FE0032988D /* ContentView.swift in Sources */,
 				A7A8C31A2A7FDDAD00F56A15 /* SelectionMenuView.swift in Sources */,
 				A7A8C3162A7E3E4A00F56A15 /* CanvasViewContainer.swift in Sources */,

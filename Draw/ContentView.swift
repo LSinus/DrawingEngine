@@ -63,6 +63,21 @@ struct ContentView: View {
                     } label: {
                         Image(systemName: "lasso")
                     }
+                    
+                },
+                trailing: HStack{
+                    Button {
+                        UndoManager.undoManager.undo()
+                        
+                    } label: {
+                        Image(systemName: "arrow.uturn.backward")
+                    }
+                    Button {
+                        UndoManager.undoManager.redo()
+                        
+                    } label: {
+                        Image(systemName: "arrow.uturn.forward")
+                    }
                 }
             )
         }.navigationViewStyle(StackNavigationViewStyle())

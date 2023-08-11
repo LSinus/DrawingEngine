@@ -58,7 +58,6 @@ class CVDelegate: CanvasViewDelegate{
             
             if lasso.isTranslating{
                 selectionMenu.useMenu(atPoint: touch.location(in: canvasView))
-                canvasView.addSubview(selectionMenu)
                 lasso.beginTranslatingStroke(position: touch.location(in: canvasView), previousPosition: touch.previousLocation(in: canvasView), translateFrom: canvasView.drawing)
                 canvasView.drawing.removeLassoStrokes()
                 return

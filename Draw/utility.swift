@@ -35,3 +35,66 @@ func calculateTranslationBetweenPoints(from: CGPoint, to: CGPoint) -> CGAffineTr
     
     return CGAffineTransform(translationX: deltaX, y: deltaY)
 }
+
+struct Stack<Element> {
+    var elements: [Element] = []
+    
+    mutating func push(_ element: Element) {
+        elements.append(element)
+    }
+    
+    mutating func pop() -> Element? {
+        return elements.popLast()
+    }
+    
+    func peek() -> Element? {
+        return elements.last
+    }
+    
+    var isEmpty: Bool {
+        return elements.isEmpty
+    }
+    
+    var count: Int {
+        return elements.count
+    }
+}
+
+struct UndoStack<Element> {
+    var actions: Stack<Element> = Stack<Element>()
+    var undoneActions: Stack<Element> = Stack<Element>()
+    
+    mutating func performAction(_ action: Element) {
+        actions.push(action)
+        undoneActions = Stack<Element>() // Resetta gli elementi annullati quando esegui una nuova azione.
+    }
+    
+    mutating func undo() -> Element? {
+        if let actionToUndo = actions.pop() {
+            if !actions.isEmpty{
+                undoneActions.push(actionToUndo)
+            }
+            else{
+                actions.push(actionToUndo)
+            }
+            return actionToUndo
+        }
+        return nil
+    }
+    
+    mutating func redo() -> Element? {
+        if let undoneAction = undoneActions.pop() {
+            actions.push(undoneAction)
+            return undoneAction
+        }
+        return nil
+    }
+    
+    var canUndo: Bool {
+        return !actions.isEmpty
+    }
+    
+    var canRedo: Bool {
+        return !undoneActions.isEmpty
+    }
+}

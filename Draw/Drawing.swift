@@ -15,6 +15,10 @@ class Drawing{
         self.strokes = []
     }
     
+    init(strokes: [Stroke]){
+        self.strokes = strokes
+    }
+    
     init(_ strokes: [Stroke]){
         self.strokes = []
         for stroke in strokes {
@@ -54,5 +58,17 @@ class Drawing{
                 stroke.apply(transform)
             }
         }
+    }
+    
+    func copy() -> Drawing{
+        
+        var copiedStrokes: [Stroke] = []
+        for stroke in strokes {
+            if !stroke.isLasso{
+                copiedStrokes.append(stroke.copy())
+            }
+        }
+        
+        return Drawing(strokes: copiedStrokes)
     }
 }
