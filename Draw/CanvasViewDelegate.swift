@@ -48,16 +48,23 @@ class CVDelegate: CanvasViewDelegate{
     var tempStroke: Stroke = Stroke()
     var previous = CGPoint()
     var previousPrevious = CGPoint()
-    var time = Date()
-    var previousTime = Date()
+    
+    var clock = Timer()
+    var timerForShape: Float = 0
+    var timerForTap: Float = 0
+    
+    var touchesPoint: [CGPoint] = []
+    
     let selectionMenu = SelectionMenuView.selectionMenu
     
     func CanvasView(didBeginDrawingIn canvasView: CanvasView, using touch: UITouch) {
+        
+        startTimerMovementDetection()
+        
         if let lasso = canvasView.tool as? Lasso{
             lasso.checkTraslation(position: touch.location(in: canvasView))
             
             if lasso.isTranslating{
-                selectionMenu.useMenu(atPoint: touch.location(in: canvasView))
                 lasso.beginTranslatingStroke(position: touch.location(in: canvasView), previousPosition: touch.previousLocation(in: canvasView), translateFrom: canvasView.drawing)
                 canvasView.drawing.removeLassoStrokes()
                 return
@@ -81,16 +88,16 @@ class CVDelegate: CanvasViewDelegate{
         }
 
         RenderCanvas(canvasView)
+        
+        touchesPoint.append(previous)
     }
     
     func CanvasView(isDrawingIn canvasView: CanvasView, using touch: UITouch) {
-        
-        previousTime = time
-        time = Date()
         //let vel = calcVelocity(now: time, previousDate: previousTime, point: touch.location(in: canvasView), previousPoint: previous)
         
         if let lasso = canvasView.tool as? Lasso{
             if lasso.isTranslating{
+                selectionMenu.resetMenu()
                 lasso.translateStroke(position: touch.location(in: canvasView), previousPosition: touch.previousLocation(in: canvasView), translateFrom: canvasView.drawing)
                 RenderCanvas(canvasView)
                 return
@@ -112,13 +119,18 @@ class CVDelegate: CanvasViewDelegate{
             RenderCanvas(canvasView)
         }
         
-        let newRect = CGRect(x: (tempStroke.path.bounds.minX - 20), y: (tempStroke.path.bounds.minY - 20), width: (tempStroke.path.bounds.width + 50), height: (tempStroke.path.bounds.height + 50))
-        RenderCanvas(canvasView, rect: newRect)
+        let rectToRender = CGRect(x: (tempStroke.path.bounds.minX - 20), y: (tempStroke.path.bounds.minY - 20), width: (tempStroke.path.bounds.width + 50), height: (tempStroke.path.bounds.height + 50))
+        RenderCanvas(canvasView, rect: rectToRender)
+        
+        touchesPoint.append(touch.location(in: canvasView))
     }
     
     func CanvasView(didFinishDrawingIn canvasView: CanvasView, using touch: UITouch) {
         if let lasso = canvasView.tool as? Lasso{
             if lasso.isTranslating{
+                if timerForTap > 0.01 && timerForTap < 0.1{
+                    selectionMenu.useMenu(atPoint: touch.location(in: canvasView))
+                }
                 canvasView.drawing.append([lasso.stroke])
             }
             else{
@@ -136,6 +148,10 @@ class CVDelegate: CanvasViewDelegate{
             }
             tempStroke = Stroke()
             RenderCanvas(canvasView)
+            touchesPoint = []
+            clock.invalidate()
+            timerForShape = 0
+            timerForTap = 0
             return
         }
             
@@ -160,6 +176,11 @@ class CVDelegate: CanvasViewDelegate{
         
         tempStroke = Stroke()
         RenderCanvas(canvasView)
+        
+        touchesPoint = []
+        clock.invalidate()
+        timerForShape = 0
+        timerForTap = 0
     }
     
     func RenderCanvas(_ view: UIView){
@@ -182,15 +203,6 @@ class CVDelegate: CanvasViewDelegate{
         tempStroke.controlPoints.append(previous)
     }
     
-    func calcVelocity(now: Date, previousDate: Date, point: CGPoint, previousPoint: CGPoint) -> CGFloat{
-        let timeInterval = now.timeIntervalSince(previousDate)
-        let distance = cgDistance(point1: point, point2: previousPoint)
-        
-        let velocity = distance / timeInterval
-        
-        return velocity
-    }
-    
     func CanvasView(didBeginTappingIn canvasView: CanvasView, using touch: UITouch){
         if SelectionMenuView.selectionMenu.copy.count > 0{
             SelectionMenuView.selectionMenu.useMenu(atPoint: touch.location(in: canvasView))
@@ -200,12 +212,12 @@ class CVDelegate: CanvasViewDelegate{
         if let lasso = canvasView.tool as? Lasso{
 //            lasso.checkTraslation(position: touch.location(in: canvasView))
 //
-//            if lasso.isTranslating{
-//
+            if lasso.isTranslating{
+                selectionMenu.useMenu(atPoint: touch.location(in: canvasView))
 //                lasso.beginTranslatingStroke(position: touch.location(in: canvasView), previousPosition: touch.previousLocation(in: canvasView), translateFrom: canvasView.drawing)
 //                canvasView.drawing.removeLassoStrokes()
 //                return
-//            }
+            }
         }
     }
     
@@ -243,5 +255,70 @@ class CVDelegate: CanvasViewDelegate{
 //            RenderCanvas(canvasView)
 //            return
 //        }
+    }
+    
+    func startTimerMovementDetection(){
+        self.clock = Timer.scheduledTimer(withTimeInterval: 0.001, repeats: true){ [weak self] timer in
+            DispatchQueue.main.async {
+                
+                self?.timerForShape += 0.001
+                self?.timerForTap += 0.001
+                
+                if self!.touchesPoint.count > 2{
+                    
+                    if cgDistance(point1: self!.touchesPoint[self!.touchesPoint.count-1], point2: self!.touchesPoint[self!.touchesPoint.count-2]) > 0.2{
+                        self?.timerForShape = 0
+                    }
+                    
+                    if self!.timerForShape >= 0.5 && self!.timerForShape < 0.501{
+                        print("shape detected at \(self!.touchesPoint[self!.touchesPoint.count-1])")
+                        let type = self!.detectShape()
+                        print(type)
+                    }
+                }
+                
+            }
+        }
+    }
+    
+    func detectShape() -> String{
+        //print("detectShape")
+        //MARK: Straight Line
+        var isLine = true
+        let lineTolerance = 35.0
+        let coefficient = (touchesPoint[touchesPoint.count-1].y - touchesPoint[0].y) / (touchesPoint[touchesPoint.count-1].x - touchesPoint[0].x)
+        
+        let constant = touchesPoint[0].y - coefficient*touchesPoint[0].x
+        
+        for point in touchesPoint {
+            let exactY = coefficient*point.x + constant
+            if(abs(point.y - exactY) > lineTolerance){
+                isLine = false
+            }
+        }
+        
+        if(!isLine){
+            var precX = touchesPoint[0].x
+            var isVertical = true
+            
+            for point in touchesPoint {
+                if(abs(point.x - precX) > lineTolerance/10){
+                    isVertical = false
+                }
+                precX = point.x
+            }
+            
+            if(isVertical){
+                isLine = true
+            }
+        }
+        
+        
+        if(isLine){
+            return "Line"
+        }
+        
+        
+        return "General"
     }
 }

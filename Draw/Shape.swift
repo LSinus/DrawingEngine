@@ -6,33 +6,25 @@
 //
 import UIKit
 
-protocol ShapeProtocol{
-    
-    func draw()
+protocol Shape{
     func edit()
     
 }
 
-class Rect: ShapeProtocol{
+class Rect: Stroke, Shape{
+    func edit(){
+        
+    }
+}
+
+class Line: Stroke, Shape{
     
-    func draw(){
-    }
     func edit(){
         
     }
 }
 
-class Line: ShapeProtocol{
-    func draw(){
-    }
-    func edit(){
-        
-    }
-}
-
-class Circle: ShapeProtocol{
-    func draw(){
-    }
+class Circle: Stroke, Shape{
     func edit(){
         
     }

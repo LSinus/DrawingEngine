@@ -46,24 +46,39 @@ open class CVContainer: UIView{
     }
     
     private func setupScrollView() {
-        // Crea l'istanza dello UIScrollView e imposta le sue proprietà (contenuto, dimensioni, ecc.)
         scrollView = UIScrollView(frame: bounds)
-        //scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        scrollView.contentSize = CGSize(width: bounds.width, height: 5000) // Esempio: altezza del contenuto dello scrollview
+        scrollView.contentSize = CGSize(width: bounds.width, height: 5000)
         scrollView.panGestureRecognizer.allowedTouchTypes = [UITouch.TouchType.direct.rawValue as NSNumber]
         scrollView.minimumZoomScale = 0.5
         scrollView.maximumZoomScale = 5.0
         scrollView.delegate = scrollViewDelegate
         addSubview(scrollView)
-        // Aggiungi le tue sottoviste al UIScrollView
-        // Esempio: aggiungi una vista per il contenuto dello UIScrollView
         scrollView.addSubview(canvasView)
-        // Crea i constraints per centrare la Subview
-
-        // Configura il layout delle sottoviste all'interno dello UIScrollView
-        // Esempio: posiziona le sottoviste all'interno di contentView
+        
+        let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture(_:)))
     }
+    
+    @objc func handlePanGesture(_ gestureRecognizer: UIPanGestureRecognizer) {
+            let touchPoint = gestureRecognizer.location(in: self)
+            let edgeInset: CGFloat = 20.0
+            
+            if touchPoint.x < edgeInset {
+                // Scorrimento a sinistra
+                scrollView.contentOffset.x -= 10
+            } else if touchPoint.x > self.frame.width - edgeInset {
+                // Scorrimento a destra
+                scrollView.contentOffset.x += 10
+            }
+            
+            if touchPoint.y < edgeInset {
+                // Scorrimento verso l'alto
+                scrollView.contentOffset.y -= 10
+            } else if touchPoint.y > self.frame.height - edgeInset {
+                // Scorrimento verso il basso
+                scrollView.contentOffset.y += 10
+            }
+        }
 }
 
 

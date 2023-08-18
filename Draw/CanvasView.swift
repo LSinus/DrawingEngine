@@ -22,9 +22,7 @@ open class CanvasView: UIView{
         self.drawing = Drawing()
         self.tool = Pen(width: 3, color: .red)
         super.init(frame: frame)
-        self.backgroundColor = .clear
-        self.layer.borderWidth = 2.0
-        self.layer.borderColor = UIColor.red.cgColor
+        commonInit()
     }
     
     /// Public init(coder:) implementation
@@ -32,13 +30,19 @@ open class CanvasView: UIView{
         self.drawing = Drawing()
         self.tool = Pen(width: 10, color: .red)
         super.init(coder: aDecoder)
-        self.backgroundColor = .clear
+        commonInit()
     }
     
     init(frame: CGRect, drawing: Drawing, tool: Tool){
         self.drawing = drawing
         self.tool = tool
         super.init(frame: frame)
+        commonInit()
+
+    }
+    
+    func commonInit(){
+        self.isUserInteractionEnabled = true
         self.backgroundColor = .clear
         self.layer.borderWidth = 2.0
         self.layer.borderColor = UIColor.red.cgColor
