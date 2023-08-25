@@ -37,6 +37,8 @@ class Stroke: Hashable{
         self.pointsTo = []
         self.controlPoints = []
         self.path.lineWidth = 5
+        self.path.lineCapStyle = .round
+        self.path.lineJoinStyle = .round
         self.color = UIColor(red: 1, green: 1, blue: 1, alpha: 1)
         getPointFromPath()
         
@@ -53,6 +55,21 @@ class Stroke: Hashable{
         self.pointsTo = []
         self.controlPoints = []
         self.path.lineWidth = 5
+        self.path.lineCapStyle = .round
+        self.path.lineJoinStyle = .round
+        self.color = color
+        getPointFromPath()
+    }
+    
+    init(path: UIBezierPath, color: UIColor, lineWidth: CGFloat){
+        self.UUID = NSUUID().uuidString
+        self.path = UIBezierPath(cgPath: path.cgPath)
+        self.pointsMove = []
+        self.pointsTo = []
+        self.controlPoints = []
+        self.path.lineWidth = lineWidth
+        self.path.lineCapStyle = .round
+        self.path.lineJoinStyle = .round
         self.color = color
         getPointFromPath()
     }
@@ -64,6 +81,8 @@ class Stroke: Hashable{
         self.pointsTo = []
         self.controlPoints = []
         self.path.lineWidth = 5
+        self.path.lineCapStyle = .round
+        self.path.lineJoinStyle = .round
         self.color = color
         self.transform = transform
         getPointFromPath()

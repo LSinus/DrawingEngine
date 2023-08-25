@@ -56,7 +56,7 @@ open class CVContainer: UIView{
         addSubview(scrollView)
         scrollView.addSubview(canvasView)
         
-        let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture(_:)))
+        //let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture(_:)))
     }
     
     @objc func handlePanGesture(_ gestureRecognizer: UIPanGestureRecognizer) {

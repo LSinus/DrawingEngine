@@ -59,7 +59,7 @@ class CVDelegate: CanvasViewDelegate{
     
     func CanvasView(didBeginDrawingIn canvasView: CanvasView, using touch: UITouch) {
         
-        startTimerMovementDetection()
+        startTimerMovementDetection(in: canvasView)
         
         if let lasso = canvasView.tool as? Lasso{
             lasso.checkTraslation(position: touch.location(in: canvasView))
@@ -107,8 +107,10 @@ class CVDelegate: CanvasViewDelegate{
         }
         previousPrevious = previous
         previous = touch.previousLocation(in: canvasView)
-                
+        
+        
         strokeBuilding(touch, canvasView)
+        
                     
         if let eraser = canvasView.tool as? EraserVec{
             eraser.erase(eraseLine: tempStroke, eraseFrom: canvasView.drawing)
@@ -257,7 +259,9 @@ class CVDelegate: CanvasViewDelegate{
 //        }
     }
     
-    func startTimerMovementDetection(){
+    func startTimerMovementDetection(in canvasView: CanvasView){
+        var isDrawn = false
+        
         self.clock = Timer.scheduledTimer(withTimeInterval: 0.001, repeats: true){ [weak self] timer in
             DispatchQueue.main.async {
                 
@@ -266,14 +270,26 @@ class CVDelegate: CanvasViewDelegate{
                 
                 if self!.touchesPoint.count > 2{
                     
-                    if cgDistance(point1: self!.touchesPoint[self!.touchesPoint.count-1], point2: self!.touchesPoint[self!.touchesPoint.count-2]) > 0.2{
+                    if cgDistance(point1: self!.touchesPoint[self!.touchesPoint.count-1], point2: self!.touchesPoint[self!.touchesPoint.count-2]) > 0.2 && !isDrawn{
                         self?.timerForShape = 0
                     }
                     
                     if self!.timerForShape >= 0.5 && self!.timerForShape < 0.501{
-                        print("shape detected at \(self!.touchesPoint[self!.touchesPoint.count-1])")
-                        let type = self!.detectShape()
-                        print(type)
+                        let shape = self!.detectShape()
+                        shape.path.lineWidth = self!.tempStroke.path.lineWidth
+                        self?.tempStroke = shape
+                        self?.RenderCanvas(canvasView)
+                        isDrawn = true
+                    }
+                    
+                    if self!.timerForShape >= 0.501 && isDrawn{
+                        if let line = self?.tempStroke as? Line{
+                            print(self!.touchesPoint[self!.touchesPoint.endIndex-1])
+                            let shape = Line(startPoint: line.startPoint, endPoint: self!.touchesPoint[self!.touchesPoint.endIndex-1], color: line.color)
+                            shape.path.lineWidth = self!.tempStroke.path.lineWidth
+                            self?.tempStroke = shape
+                            self?.RenderCanvas(canvasView)
+                        }
                     }
                 }
                 
@@ -281,7 +297,7 @@ class CVDelegate: CanvasViewDelegate{
         }
     }
     
-    func detectShape() -> String{
+    func detectShape() -> Stroke{
         //print("detectShape")
         //MARK: Straight Line
         var isLine = true
@@ -315,10 +331,11 @@ class CVDelegate: CanvasViewDelegate{
         
         
         if(isLine){
-            return "Line"
+            let line = Line(startPoint: tempStroke.pointsMove[0], endPoint: tempStroke.path.currentPoint, color: tempStroke.color)
+            return line
         }
         
         
-        return "General"
+        return tempStroke
     }
 }
