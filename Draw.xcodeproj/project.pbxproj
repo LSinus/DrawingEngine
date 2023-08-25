@@ -24,6 +24,7 @@
 		A7A8C3142A7D052500F56A15 /* UIScrollViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A8C3132A7D052500F56A15 /* UIScrollViewDelegate.swift */; };
 		A7A8C3162A7E3E4A00F56A15 /* CanvasViewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A8C3152A7E3E4A00F56A15 /* CanvasViewContainer.swift */; };
 		A7A8C31A2A7FDDAD00F56A15 /* SelectionMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A8C3192A7FDDAD00F56A15 /* SelectionMenuView.swift */; };
+		A7ABD3DC2A98DA8500F99CD5 /* ImageStroke.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7ABD3DB2A98DA8500F99CD5 /* ImageStroke.swift */; };
 		A7FBC3CE2A84F1CD0061B5F0 /* UndoManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7FBC3CD2A84F1CD0061B5F0 /* UndoManager.swift */; };
 /* End PBXBuildFile section */
 
@@ -66,6 +67,7 @@
 		A7A8C3132A7D052500F56A15 /* UIScrollViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIScrollViewDelegate.swift; sourceTree = "<group>"; };
 		A7A8C3152A7E3E4A00F56A15 /* CanvasViewContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasViewContainer.swift; sourceTree = "<group>"; };
 		A7A8C3192A7FDDAD00F56A15 /* SelectionMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectionMenuView.swift; sourceTree = "<group>"; };
+		A7ABD3DB2A98DA8500F99CD5 /* ImageStroke.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageStroke.swift; sourceTree = "<group>"; };
 		A7FBC3CD2A84F1CD0061B5F0 /* UndoManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UndoManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -127,6 +129,7 @@
 				A772F79B2A17697800D74521 /* Stroke.swift */,
 				A772F7992A17693000D74521 /* CanvasViewDelegate.swift */,
 				A772F7972A153C5000D74521 /* Shape.swift */,
+				A7ABD3DB2A98DA8500F99CD5 /* ImageStroke.swift */,
 				A772F79D2A1769B400D74521 /* Drawing.swift */,
 				A772F79F2A176A6700D74521 /* Tool.swift */,
 				A74B41F82A729CB2009797AE /* utility.swift */,
@@ -290,6 +293,7 @@
 				A775CA952A12C2FE0032988D /* DrawApp.swift in Sources */,
 				A772F79A2A17693000D74521 /* CanvasViewDelegate.swift in Sources */,
 				A772F79E2A1769B400D74521 /* Drawing.swift in Sources */,
+				A7ABD3DC2A98DA8500F99CD5 /* ImageStroke.swift in Sources */,
 				A775CAC52A12C39C0032988D /* CanvasView.swift in Sources */,
 				A74B41F92A729CB2009797AE /* utility.swift in Sources */,
 				A7A8C3142A7D052500F56A15 /* UIScrollViewDelegate.swift in Sources */,

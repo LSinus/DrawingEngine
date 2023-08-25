@@ -221,6 +221,23 @@ class CVDelegate: CanvasViewDelegate{
 //                return
             }
         }
+        
+        else{
+            
+            if let pasteBoardImage = UIPasteboard.general.image{
+                if let rawImage = pasteBoardImage.cgImage{
+                    let image = UIImage(cgImage: rawImage)
+                    
+                    tempStroke = ImageStroke(image: image, at: touch.location(in: canvasView))
+                    canvasView.drawing.strokes.append(tempStroke)
+                    
+                    tempStroke = Stroke()
+                    
+                    RenderCanvas(canvasView)
+                    UndoManager.undoManager.performAction()
+                }
+            }
+        }
     }
     
     func CanvasView(isTappingIn canvasView: CanvasView, using touch: UITouch){
