@@ -42,6 +42,7 @@ open class CanvasView: UIView{
     }
     
     func commonInit(){
+        self.clipsToBounds = true
         self.isUserInteractionEnabled = true
         self.backgroundColor = .clear
         self.layer.borderWidth = 2.0

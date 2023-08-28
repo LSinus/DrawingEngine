@@ -228,7 +228,11 @@ class CVDelegate: CanvasViewDelegate{
                 if let rawImage = pasteBoardImage.cgImage{
                     let image = UIImage(cgImage: rawImage)
                     
-                    tempStroke = ImageStroke(image: image, at: touch.location(in: canvasView))
+                    let imageStroke = ImageStroke(image: image, at: touch.location(in: canvasView))
+                    imageStroke.bindModifier(sender: canvasView)
+                    
+                    tempStroke = imageStroke
+                    
                     canvasView.drawing.strokes.append(tempStroke)
                     
                     tempStroke = Stroke()
