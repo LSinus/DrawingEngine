@@ -55,17 +55,29 @@ class ImageStroke: Stroke{
     }
     
     func bindModifier(sender canvasView: CanvasView){
-        let imageModifier = ImageModifier(image: self, sender: canvasView)
-        
-        self.modifier = imageModifier
+        if self.modifier == nil{
+            let imageModifier = ImageModifier(image: self, sender: canvasView)
+            self.modifier = imageModifier
+            canvasView.setNeedsDisplay()
+        }
+    }
+    
+    func unBindModifier(sender canvasView: CanvasView){
+        if self.modifier != nil{
+            self.color = .clear
+            self.modifier?.unBind()
+            self.modifier = nil
+            print("unbind")
+            canvasView.setNeedsDisplay()
+        }
     }
 }
 
 class ImageModifier{
     var handles: [Handle] = []
-    var image: ImageStroke
+    weak var image: ImageStroke?
     
-    private let sender: CanvasView
+    private weak var sender: CanvasView?
     
     init(image: ImageStroke, sender: CanvasView) {
         self.image = image
@@ -81,7 +93,7 @@ class ImageModifier{
         }
     }
     
-    func getContext() -> CanvasView{
+    func getContext() -> CanvasView?{
         return self.sender
     }
     
@@ -129,26 +141,22 @@ class ImageModifier{
                 newOrigin = handle.frame.origin
             }
         }
+        if let image = image{
+            let translationTransform = CGAffineTransform(translationX: -anchorForTranslation.x, y: -anchorForTranslation.y)
+            let scaleTrasfrom = CGAffineTransform(scaleX: newSize.width/image.renderRect.width, y: newSize.height/image.renderRect.height)
+            let invertedDranslationTransform = CGAffineTransform(translationX: anchorForTranslation.x, y: anchorForTranslation.y)
+            
+            image.renderRect.origin = newOrigin
+            image.renderRect.size = newSize
+            
+    //        image.image = UIImage()
+            
+            image.path.apply(translationTransform)
+            image.path.apply(scaleTrasfrom)
+            image.path.apply(invertedDranslationTransform)
+        }
         
-        
-        let translationTransform = CGAffineTransform(translationX: -anchorForTranslation.x, y: -anchorForTranslation.y)
-        let scaleTrasfrom = CGAffineTransform(scaleX: newSize.width/image.renderRect.width, y: newSize.height/image.renderRect.height)
-        let invertedDranslationTransform = CGAffineTransform(translationX: anchorForTranslation.x, y: anchorForTranslation.y)
-        
-        print(translationTransform)
-        
-        image.renderRect.origin = newOrigin
-        image.renderRect.size = newSize
-        
-//        image.image = UIImage()
-        
-        image.path.apply(translationTransform)
-        image.path.apply(scaleTrasfrom)
-        image.path.apply(invertedDranslationTransform)
-        
-        sender.setNeedsDisplay()
-        
-        print(image.renderRect.size)
+        sender?.setNeedsDisplay()
     }
     
     func resizeUIImage(image: UIImage, targetSize: CGSize) -> UIImage? {
@@ -157,6 +165,12 @@ class ImageModifier{
         let newImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         return newImage
+    }
+    
+    func unBind(){
+        for handle in handles {
+            handle.removeFromSuperview()
+        }
     }
 }
 
@@ -187,7 +201,7 @@ class Handle: UIView{
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        print("ok started")
+        
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -197,6 +211,6 @@ class Handle: UIView{
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        print("ok finished")
+        
     }
 }

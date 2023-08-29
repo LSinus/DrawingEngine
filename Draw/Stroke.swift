@@ -147,9 +147,9 @@ class Stroke: Hashable{
     func draw(with tool: Tool){
         self.isLasso = false
         self.path.setLineDash([], count: 0, phase: 0.0)
-        if let lasso = tool as? Lasso{
+        if let _ = tool as? Lasso{
             self.isLasso = true
-            self.path.setLineDash([lasso.dash, lasso.space], count: 2, phase: 0.0)
+            self.path.setLineDash([10, 10], count: 2, phase: 0.0)
         }
         self.path.lineWidth = CGFloat(tool.width)
         self.color = tool.color

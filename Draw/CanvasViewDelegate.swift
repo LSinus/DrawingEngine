@@ -62,24 +62,16 @@ class CVDelegate: CanvasViewDelegate{
         startTimerMovementDetection(in: canvasView)
         
         if let lasso = canvasView.tool as? Lasso{
-            lasso.checkTraslation(position: touch.location(in: canvasView))
-            
-            if lasso.isTranslating{
-                lasso.beginTranslatingStroke(position: touch.location(in: canvasView), previousPosition: touch.previousLocation(in: canvasView), translateFrom: canvasView.drawing)
-                canvasView.drawing.removeLassoStrokes()
-                return
-            }
+            lasso.checkState(position: touch.location(in: canvasView), canvasView: canvasView)
+            lasso.beginDrawing(by: self, with: touch, in: canvasView)
+            lasso.translateStroke(position: touch.location(in: canvasView), previousPosition: touch.previousLocation(in: canvasView), translateFrom: canvasView.drawing)
+            RenderCanvas(canvasView)
+            return
         }
         
-        //remove old lasso selections
-        canvasView.drawing.removeLassoStrokes()
         
-        previous = touch.location(in: canvasView)
-        previousPrevious = touch.location(in: canvasView)
-    
-        tempStroke.path.move(to: previous)
-        tempStroke.pointsMove.append(previous)
-                
+        beginStrokeBuilding(touch, canvasView)
+        
         if let eraser = canvasView.tool as? EraserBit{
             eraser.erase(eraseLine: tempStroke, eraseFrom: canvasView.drawing)
         }
@@ -96,18 +88,26 @@ class CVDelegate: CanvasViewDelegate{
         //let vel = calcVelocity(now: time, previousDate: previousTime, point: touch.location(in: canvasView), previousPoint: previous)
         
         if let lasso = canvasView.tool as? Lasso{
-            if lasso.isTranslating{
-                selectionMenu.resetMenu()
-                lasso.translateStroke(position: touch.location(in: canvasView), previousPosition: touch.previousLocation(in: canvasView), translateFrom: canvasView.drawing)
-                RenderCanvas(canvasView)
-                return
-            }
+            lasso.checkState(position: touch.location(in: canvasView), canvasView: canvasView)
+            lasso.continueDrawing(by: self, with: touch, in: canvasView)
+            lasso.translateStroke(position: touch.location(in: canvasView), previousPosition: touch.previousLocation(in: canvasView), translateFrom: canvasView.drawing)
+            RenderCanvas(canvasView)
+            return
             
-            //lasso.calculateDashSize(vel: vel)
+//            if lasso.isTranslating{
+//                selectionMenu.resetMenu()
+//                lasso.translateStroke(position: touch.location(in: canvasView), previousPosition: touch.previousLocation(in: canvasView), translateFrom: canvasView.drawing)
+//                RenderCanvas(canvasView)
+//                return
+//            }
+//
+//            //lasso.calculateDashSize(vel: vel)
+//            else{
+//                lasso.continueDrawing(by: self, with: touch, in: canvasView)
+//                RenderCanvas(canvasView)
+//                return
+//            }
         }
-        previousPrevious = previous
-        previous = touch.previousLocation(in: canvasView)
-        
         
         strokeBuilding(touch, canvasView)
         
@@ -129,25 +129,29 @@ class CVDelegate: CanvasViewDelegate{
     
     func CanvasView(didFinishDrawingIn canvasView: CanvasView, using touch: UITouch) {
         if let lasso = canvasView.tool as? Lasso{
-            if lasso.isTranslating{
-                if timerForTap > 0.01 && timerForTap < 0.1{
-                    selectionMenu.useMenu(atPoint: touch.location(in: canvasView))
-                }
-                canvasView.drawing.append([lasso.stroke])
-            }
-            else{
-                if tempStroke.pointsMove.count > 0{
-                    //closing tempStroke
-                    tempStroke.path.move(to: tempStroke.path.cgPath.currentPoint)
-                    tempStroke.path.addLine(to: tempStroke.pointsMove[0])
-                    
-                    //determine selected paths
-                    let numberOfSelectedStrokes = lasso.determineSelectedPaths(lassoStroke: tempStroke, selectFrom: canvasView.drawing)
-                    if numberOfSelectedStrokes != 0 {
-                        canvasView.drawing.strokes.append(tempStroke)
-                    }
-                }
-            }
+//            if lasso.isTranslating{
+//                if timerForTap > 0.01 && timerForTap < 0.1{
+//                    selectionMenu.useMenu(atPoint: touch.location(in: canvasView))
+//                }
+//                canvasView.drawing.append([lasso.stroke])
+//            }
+//            else{
+//                if tempStroke.pointsMove.count > 0{
+//                    //closing tempStroke
+//                    lasso.finishDrawing(by: self, with: touch, in: canvasView)
+//                    print(tempStroke.pointsMove.count)
+//                    //determine selected paths
+//                    let numberOfSelectedStrokes = lasso.determineSelectedPaths(lassoStroke: tempStroke, selectFrom: canvasView.drawing)
+//                    if numberOfSelectedStrokes != 0 {
+//                        canvasView.drawing.strokes.append(tempStroke)
+//                    }
+//                }
+//            }
+            lasso.translateStroke(position: touch.location(in: canvasView), previousPosition: touch.previousLocation(in: canvasView), translateFrom: canvasView.drawing)
+            lasso.checkState(position: touch.location(in: canvasView), canvasView: canvasView)
+            lasso.finishDrawing(by: self, with: touch, in: canvasView)
+            lasso.determineSelectedPaths(lassoStroke: tempStroke, selectFrom: canvasView.drawing)            
+            
             tempStroke = Stroke()
             RenderCanvas(canvasView)
             touchesPoint = []
@@ -156,10 +160,7 @@ class CVDelegate: CanvasViewDelegate{
             timerForTap = 0
             return
         }
-            
-        previousPrevious = previous
-        previous = touch.previousLocation(in: canvasView)
-                
+        
         strokeBuilding(touch, canvasView)
     
         if let eraser = canvasView.tool as? EraserVec{
@@ -197,7 +198,18 @@ class CVDelegate: CanvasViewDelegate{
         return tempStroke
     }
     
-    func strokeBuilding(_ touch: UITouch, _ canvasView: UIView){
+    func beginStrokeBuilding(_ touch: UITouch, _ canvasView: CanvasView){
+        previous = touch.location(in: canvasView)
+        previousPrevious = touch.location(in: canvasView)
+    
+        tempStroke.path.move(to: previous)
+        tempStroke.pointsMove.append(previous)
+    }
+    
+    func strokeBuilding(_ touch: UITouch, _ canvasView: CanvasView){
+        previousPrevious = previous
+        previous = touch.previousLocation(in: canvasView)
+        
         tempStroke.path.move(to: getMidPoint(from: previousPrevious, to: previous))
         tempStroke.pointsMove.append(getMidPoint(from: previousPrevious, to: previous))
         tempStroke.path.addQuadCurve(to: getMidPoint(from: touch.location(in: canvasView), to: previous), controlPoint: previous)
@@ -205,21 +217,14 @@ class CVDelegate: CanvasViewDelegate{
         tempStroke.controlPoints.append(previous)
     }
     
+    func closeStroke(_ touch: UITouch, _ canvasView: CanvasView){
+        tempStroke.path.move(to: tempStroke.path.cgPath.currentPoint)
+        tempStroke.path.addLine(to: tempStroke.pointsMove[0])
+    }
+    
     func CanvasView(didBeginTappingIn canvasView: CanvasView, using touch: UITouch){
         if SelectionMenuView.selectionMenu.copy.count > 0{
             SelectionMenuView.selectionMenu.useMenu(atPoint: touch.location(in: canvasView))
-        }
-        
-        
-        if let lasso = canvasView.tool as? Lasso{
-//            lasso.checkTraslation(position: touch.location(in: canvasView))
-//
-            if lasso.isTranslating{
-                selectionMenu.useMenu(atPoint: touch.location(in: canvasView))
-//                lasso.beginTranslatingStroke(position: touch.location(in: canvasView), previousPosition: touch.previousLocation(in: canvasView), translateFrom: canvasView.drawing)
-//                canvasView.drawing.removeLassoStrokes()
-//                return
-            }
         }
         
         else{
@@ -229,7 +234,7 @@ class CVDelegate: CanvasViewDelegate{
                     let image = UIImage(cgImage: rawImage)
                     
                     let imageStroke = ImageStroke(image: image, at: touch.location(in: canvasView))
-                    imageStroke.bindModifier(sender: canvasView)
+                   
                     
                     tempStroke = imageStroke
                     
@@ -245,39 +250,10 @@ class CVDelegate: CanvasViewDelegate{
     }
     
     func CanvasView(isTappingIn canvasView: CanvasView, using touch: UITouch){
-//        if let lasso = canvasView.tool as? Lasso{
-//            if lasso.isTranslating{
-//                lasso.translateStroke(position: touch.location(in: canvasView), previousPosition: touch.previousLocation(in: canvasView), translateFrom: canvasView.drawing)
-//                RenderCanvas(canvasView)
-//                return
-//            }
-//
-//            //lasso.calculateDashSize(vel: vel)
-//        }
     }
     
     func CanvasView(didFinishTappingIn canvasView: CanvasView, using touch: UITouch) {
-//        if let lasso = canvasView.tool as? Lasso{
-//            if lasso.isTranslating{
-//                canvasView.drawing.append([lasso.stroke])
-//            }
-//            else{
-//                if tempStroke.pointsMove.count > 0{
-//                    //closing tempStroke
-//                    tempStroke.path.move(to: tempStroke.path.cgPath.currentPoint)
-//                    tempStroke.path.addLine(to: tempStroke.pointsMove[0])
-//
-//                    //determine selected paths
-//                    let numberOfSelectedStrokes = lasso.determineSelectedPaths(lassoStroke: tempStroke, selectFrom: canvasView.drawing)
-//                    if numberOfSelectedStrokes != 0 {
-//                        canvasView.drawing.strokes.append(tempStroke)
-//                    }
-//                }
-//            }
-//            tempStroke = Stroke()
-//            RenderCanvas(canvasView)
-//            return
-//        }
+
     }
     
     func startTimerMovementDetection(in canvasView: CanvasView){

@@ -259,109 +259,57 @@ class Lasso: Tool{
     var color: UIColor
     var selectedStrokes: [Stroke]
     var stroke: Stroke
-    var isTranslating = false
-    var dash = 10.0
-    var space = 10.0
     
-    init(){
+    private var state: LassoState
+    
+    init(_ state: LassoState){
         self.type = .Lasso
         self.width = 3
         self.color = .systemBlue
         self.selectedStrokes = []
         self.stroke = Stroke()
+        self.state = state
+        transitionTo(state: state)
     }
     
-    init(stroke: Stroke, seletedStrokes: [Stroke], isTraslating: Bool){
+    init(stroke: Stroke, seletedStrokes: [Stroke], state: LassoState){
         self.type = .Lasso
         self.width = 3
         self.color = .systemBlue
         self.stroke = stroke
         self.selectedStrokes = seletedStrokes
-        self.isTranslating = isTraslating
+        self.state = state
+        transitionTo(state: state)
     }
     
-    func determineSelectedPaths(lassoStroke: Stroke, selectFrom drawing: Drawing) -> Int{
-        isTranslating = true
-        var numberOfSelectedStrokes = 0
-        for stroke in drawing.strokes{
-            if !stroke.isLasso{
-                for point in stroke.pointsMove{
-                    if lassoStroke.path.contains(point.applying(stroke.transform)) && lassoStroke.path.bounds.contains(point.applying(stroke.transform)){
-                        numberOfSelectedStrokes += 1
-                        self.selectedStrokes.append(stroke)
-                        self.stroke = lassoStroke
-                        SelectionMenuView.selectionMenu.setMenuOptions(options: SelectionMenuView.selectionMenu.standardOptions)
-                        break
-                    }
-                    
-                }
-            }
-        }
-        
-        return numberOfSelectedStrokes
+    func transitionTo(state: LassoState){
+        self.state = state
+        self.state.update(context: self)
     }
     
-    func selectStroke(_ stroke : Stroke) -> Stroke{
-        let newStroke = Stroke(path: stroke.path, color: .red)
-        
-        return newStroke
+    func beginDrawing(by canvasViewDelegate: CVDelegate, with touch: UITouch, in canvasView: CanvasView){
+        state.beginDrawing(by: canvasViewDelegate, with: touch, in: canvasView)
     }
     
-    func checkTraslation(position: CGPoint){
-        if stroke.path.contains(position) && stroke.path.bounds.contains(position){
-            isTranslating = true
-            return
-        }
-        if SelectionMenuView.selectionMenu.copy.count > 0 && SelectionMenuView.selectionMenu.menuOptions == SelectionMenuView.selectionMenu.pasteOptions{
-            SelectionMenuView.selectionMenu.useMenu(atPoint: position)
-            isTranslating = false
-            stroke = Stroke()
-            return
-        }
-        isTranslating = false
-        selectedStrokes = []
-        stroke = Stroke()
-        SelectionMenuView.selectionMenu.resetMenu()
+    func continueDrawing(by canvasViewDelegate: CVDelegate, with touch: UITouch, in canvasView: CanvasView){
+        state.continueDrawing(by: canvasViewDelegate, with: touch, in: canvasView)
     }
     
-    func beginTranslatingStroke(position: CGPoint, previousPosition: CGPoint, translateFrom drawing: Drawing){
-        if stroke.path.contains(position) && stroke.path.bounds.contains(position){
-            
-            let deltaX = position.x - previousPosition.x
-            let deltaY = position.y - previousPosition.y
-            
-            let transform = CGAffineTransform(translationX: deltaX, y: deltaY)
-            
-            stroke.apply(transform)
-            
-            for selectedStroke in selectedStrokes {
-                drawing.translateStroke(UUID: selectedStroke.UUID, translateWith: transform)
-                
-            }
-        }
-        
-        else{
-            isTranslating = false
-            selectedStrokes = []
-        }
+    func finishDrawing(by canvasViewDelegate: CVDelegate, with touch: UITouch, in canvasView: CanvasView){
+        state.finishDrawing(by: canvasViewDelegate, with: touch, in: canvasView)
+    }
+    
+
+    func determineSelectedPaths(lassoStroke: Stroke, selectFrom drawing: Drawing){
+        state.determineSelectedPaths(lassoStroke: lassoStroke, selectFrom: drawing)
+    }
+    
+    func checkState(position: CGPoint, canvasView: CanvasView){
+        state.checkState(position: position, canvasView: canvasView)
     }
     
     func translateStroke(position: CGPoint, previousPosition: CGPoint, translateFrom drawing: Drawing){
-        let deltaX = position.x - previousPosition.x
-        let deltaY = position.y - previousPosition.y
-        
-        let transform = CGAffineTransform(translationX: deltaX, y: deltaY)
-        
-        stroke.apply(transform)
-        
-        for selectedStroke in selectedStrokes {
-            drawing.translateStroke(UUID: selectedStroke.UUID, translateWith: transform)
-            
-        }
-    }
-    
-    func calculateDashSize(vel: CGFloat){
-        space = 10 * vel
+        state.translateStroke(position: position, previousPosition: previousPosition, translateFrom: drawing)
     }
     
     func deleteStroke(removeFrom drawing: Drawing){
@@ -371,9 +319,244 @@ class Lasso: Tool{
     }
     
     func copy() -> Tool {
-        return Lasso(stroke: self.stroke, seletedStrokes: self.selectedStrokes, isTraslating: self.isTranslating)
+        return Lasso(stroke: self.stroke, seletedStrokes: self.selectedStrokes, state:  self.state)
     }
     
 }
+
+
+protocol LassoState {
+    func update(context: Lasso)
+    func beginDrawing(by canvasViewDelegate: CVDelegate, with touch: UITouch, in canvasView: CanvasView)
+    func continueDrawing(by canvasViewDelegate: CVDelegate, with touch: UITouch, in canvasView: CanvasView)
+    func finishDrawing(by canvasViewDelegate: CVDelegate, with touch: UITouch, in canvasView: CanvasView)
+    func determineSelectedPaths(lassoStroke: Stroke, selectFrom drawing: Drawing)
+    func checkState(position: CGPoint, canvasView: CanvasView)
+    func translateStroke(position: CGPoint, previousPosition: CGPoint, translateFrom drawing: Drawing)
+}
+
+class LassoBaseState: LassoState{
+    private(set) weak var context: Lasso?
+    
+    func update(context: Lasso) {
+        self.context = context
+    }
+    
+    func beginDrawing(by canvasViewDelegate: CVDelegate, with touch: UITouch, in canvasView: CanvasView){}
+    
+    func continueDrawing(by canvasViewDelegate: CVDelegate, with touch: UITouch, in canvasView: CanvasView){}
+    
+    func finishDrawing(by canvasViewDelegate: CVDelegate, with touch: UITouch, in canvasView: CanvasView){}
+    
+    func determineSelectedPaths(lassoStroke: Stroke, selectFrom drawing: Drawing){}
+    
+    func checkState(position: CGPoint, canvasView: CanvasView){}
+    
+    func translateStroke(position: CGPoint, previousPosition: CGPoint, translateFrom drawing: Drawing){}
+}
+
+
+class SelectingState: LassoBaseState{
+    
+    override func beginDrawing(by canvasViewDelegate: CVDelegate, with touch: UITouch, in canvasView: CanvasView){
+        canvasView.drawing.removeLassoStrokes()
+        canvasViewDelegate.beginStrokeBuilding(touch, canvasView)
+    }
+    
+    override func continueDrawing(by canvasViewDelegate: CVDelegate, with touch: UITouch, in canvasView: CanvasView){
+        canvasViewDelegate.strokeBuilding(touch, canvasView)
+    }
+    
+    override func finishDrawing(by canvasViewDelegate: CVDelegate, with touch: UITouch, in canvasView: CanvasView){
+        canvasViewDelegate.closeStroke(touch, canvasView)
+        
+        if let lasso = context{
+        
+            if canvasViewDelegate.timerForTap > 0.01 && canvasViewDelegate.timerForTap < 0.1 && (SelectionMenuView.selectionMenu.menuOptions == SelectionMenuView.selectionMenu.pasteOptions || !lasso.selectedStrokes.isEmpty){
+                SelectionMenuView.selectionMenu.useMenu(atPoint: touch.location(in: canvasView))
+                context?.transitionTo(state: TranslationState())
+                print("transition to TranslationState")
+            }
+        }
+    }
+    
+    override func determineSelectedPaths(lassoStroke: Stroke, selectFrom drawing: Drawing){
+        var numberOfSelectedStrokes = 0
+        for stroke in drawing.strokes{
+            if !stroke.isLasso{
+                for point in stroke.pointsMove{
+                    if lassoStroke.path.contains(point.applying(stroke.transform)) && lassoStroke.path.bounds.contains(point.applying(stroke.transform)){
+                        numberOfSelectedStrokes += 1
+                        context?.selectedStrokes.append(stroke)
+                        context?.stroke = lassoStroke
+                        SelectionMenuView.selectionMenu.setMenuOptions(options: SelectionMenuView.selectionMenu.standardOptions)
+                        break
+                    }
+                    
+                }
+            }
+        }
+        
+        if numberOfSelectedStrokes != 0{
+            drawing.append(lassoStroke)
+            context?.transitionTo(state: TranslationState())
+        }
+    }
+    
+    override func checkState(position: CGPoint, canvasView: CanvasView){
+        if let lasso = context{
+            
+            for stroke in canvasView.drawing.strokes{
+                if let line = stroke as? Line{
+                    for point in line.pointsMove{
+                        if cgDistance(point1: point.applying(line.transform), point2: position) < 10{
+                            lasso.selectedStrokes = [stroke]
+                            lasso.transitionTo(state: EditByHandlesState())
+                            print("transition to EditByHandlesState")
+                            return
+                        }
+                    }
+                }
+                
+                if let image = stroke as? ImageStroke{
+                    for point in image.pointsMove{
+                        if cgDistance(point1: point.applying(image.transform), point2: position) < 10{
+                            lasso.selectedStrokes = [stroke]
+                            image.bindModifier(sender: canvasView)
+                            lasso.transitionTo(state: EditByHandlesState())
+                            print("transition to EditByHandlesState")
+                            return
+                        }
+                    }
+                }
+            }
+            
+            if lasso.stroke.path.contains(position) && lasso.stroke.path.bounds.contains(position){
+                lasso.transitionTo(state: TranslationState())
+                print("transition to TranslationState")
+            }
+            else{
+                lasso.selectedStrokes = []
+                lasso.stroke = Stroke()
+                SelectionMenuView.selectionMenu.resetMenu()
+            }
+            
+            
+        }
+    }
+}
+
+class TranslationState: LassoBaseState{
+    override func beginDrawing(by canvasViewDelegate: CVDelegate, with touch: UITouch, in canvasView: CanvasView) {
+        canvasView.drawing.removeLassoStrokes()
+        SelectionMenuView.selectionMenu.resetMenu()
+    }
+    
+    override func finishDrawing(by canvasViewDelegate: CVDelegate, with touch: UITouch, in canvasView: CanvasView) {
+        if let lasso = context{
+            canvasView.drawing.append(lasso.stroke)
+        }
+        SelectionMenuView.selectionMenu.useMenu(atPoint: touch.location(in: canvasView))
+    }
+    
+    override func checkState(position: CGPoint, canvasView: CanvasView){
+        if let lasso = context{
+            if SelectionMenuView.selectionMenu.copy.count > 0 && SelectionMenuView.selectionMenu.menuOptions == SelectionMenuView.selectionMenu.pasteOptions{
+                
+                SelectionMenuView.selectionMenu.useMenu(atPoint: position)
+
+                lasso.stroke = Stroke()
+                lasso.selectedStrokes = []
+                lasso.transitionTo(state: SelectingState())
+                print("transition to SelectingState")
+                
+            }
+            else if !lasso.stroke.path.contains(position) || !lasso.stroke.path.bounds.contains(position){
+                lasso.transitionTo(state: SelectingState())
+                lasso.selectedStrokes = []
+                lasso.stroke = Stroke()
+                SelectionMenuView.selectionMenu.resetMenu()
+                print("transition to SelectingState")
+                
+            }
+        }
+    }
+    
+    override func translateStroke(position: CGPoint, previousPosition: CGPoint, translateFrom drawing: Drawing){
+        let deltaX = position.x - previousPosition.x
+        let deltaY = position.y - previousPosition.y
+        
+        let transform = CGAffineTransform(translationX: deltaX, y: deltaY)
+        
+        if let lasso = context{
+            lasso.stroke.apply(transform)
+            
+            for selectedStroke in lasso.selectedStrokes {
+                drawing.translateStroke(UUID: selectedStroke.UUID, translateWith: transform)
+                
+            }
+        }
+    }
+}
+
+class EditByHandlesState: LassoBaseState{
+    override func finishDrawing(by canvasViewDelegate: CVDelegate, with touch: UITouch, in canvasView: CanvasView) {
+        SelectionMenuView.selectionMenu.useMenu(atPoint: touch.location(in: canvasView))
+    }
+    
+    override func checkState(position: CGPoint, canvasView: CanvasView) {
+        if let lasso = context{
+            for stroke in lasso.selectedStrokes{
+                if let image = stroke as? ImageStroke{
+                    if image.UUID == stroke.UUID{
+                        
+                        var minDist = cgDistance(point1: image.pointsMove[0].applying(image.transform), point2: position)
+                        
+                        for point in image.pointsMove{
+                            let dist = cgDistance(point1: point.applying(image.transform), point2: position)
+                            if dist < minDist{
+                                minDist = dist
+                            }
+                            
+                            if minDist > 100{
+                                image.unBindModifier(sender: canvasView)
+                                lasso.selectedStrokes = []
+                                lasso.transitionTo(state: SelectingState())
+                                print("transition to SelectingState")
+                            }
+                        }
+                    }
+                }
+                
+                if let line = stroke as? Line{
+                    for point in line.pointsMove{
+                        if cgDistance(point1: point.applying(line.transform), point2: position) > 100{
+//                            line.unBindModifier(sender: canvasView)
+                        }
+                    }
+                }
+            }
+            
+
+        }
+    }
+    
+    override func translateStroke(position: CGPoint, previousPosition: CGPoint, translateFrom drawing: Drawing){
+        let deltaX = position.x - previousPosition.x
+        let deltaY = position.y - previousPosition.y
+        
+        let transform = CGAffineTransform(translationX: deltaX, y: deltaY)
+        
+        if let lasso = context{
+            lasso.stroke.apply(transform)
+            
+            for selectedStroke in lasso.selectedStrokes {
+                drawing.translateStroke(UUID: selectedStroke.UUID, translateWith: transform)
+                
+            }
+        }
+    }
+}
+
 
 

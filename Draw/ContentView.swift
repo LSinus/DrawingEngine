@@ -58,7 +58,7 @@ struct ContentView: View {
                         SelectionMenuView.selectionMenu.resetMenu()
                         cvc.canvasView.drawing.removeLassoStrokes()
                         cvc.canvasView.setNeedsDisplay()
-                        cvc.canvasView.tool = Lasso()
+                        cvc.canvasView.tool = Lasso(SelectingState())
                         
                     } label: {
                         Image(systemName: "lasso")
