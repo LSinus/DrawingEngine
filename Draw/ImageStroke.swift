@@ -28,6 +28,7 @@ class ImageStroke: Stroke{
         renderPath.move(to: CGPoint(x: renderRect.minX, y: renderRect.maxY))
         renderPath.addLine(to: CGPoint(x: renderRect.minX, y: renderRect.minY))
         super.init(path: renderPath, color: .clear)
+        super.color = .green
         
     }
     
@@ -49,6 +50,11 @@ class ImageStroke: Stroke{
         modifier?.apply(transfrom)
     }
     
+    func applyDuringHandle(_ transfrom: CGAffineTransform) {
+        super.apply(transfrom)
+        renderRect = renderRect.applying(transfrom)
+    }
+    
     override func copy() -> Stroke {
         let copy = ImageStroke(image: self.image, renderPath: self.renderPath, renderRect: self.renderRect)
         return copy
@@ -64,7 +70,7 @@ class ImageStroke: Stroke{
     
     func unBindModifier(sender canvasView: CanvasView){
         if self.modifier != nil{
-            self.color = .clear
+            self.color = .green
             self.modifier?.unBind()
             self.modifier = nil
             print("unbind")
@@ -82,8 +88,10 @@ class ImageModifier{
     init(image: ImageStroke, sender: CanvasView) {
         self.image = image
         self.sender = sender
-        for point in image.pointsMove{
-            let handle = Handle(frame: CGRect(x: point.x-5, y: point.y-5, width: 10, height: 10))
+        for i in 1..<image.pointsMove.count{
+            
+            let handle = Handle(frame: CGRect(x: image.pointsMove[i].applying(image.transform).x-5, y: image.pointsMove[i].applying(image.transform).y-5, width: 10, height: 10))
+            print("handle created")
             handle.modifier = self
             
             sender.addSubview(handle)
@@ -134,26 +142,30 @@ class ImageModifier{
         
         //image.image = resizeUIImage(image: image.image, targetSize: newSize) ?? image.image
         
-        var newOrigin = CGPoint(x:handle.frame.origin.x + 10, y:handle.frame.origin.y + 10 )
+        var newOrigin = CGPoint(x:handle.frame.origin.x + 5, y:handle.frame.origin.y + 5)
         
         for handle in handles{
             if handle.frame.origin.x < newOrigin.x && handle.frame.origin.y < newOrigin.y {
-                newOrigin = handle.frame.origin
+                newOrigin = CGPoint(x:handle.frame.origin.x + 5, y:handle.frame.origin.y + 5)
             }
         }
         if let image = image{
             let translationTransform = CGAffineTransform(translationX: -anchorForTranslation.x, y: -anchorForTranslation.y)
             let scaleTrasfrom = CGAffineTransform(scaleX: newSize.width/image.renderRect.width, y: newSize.height/image.renderRect.height)
             let invertedDranslationTransform = CGAffineTransform(translationX: anchorForTranslation.x, y: anchorForTranslation.y)
-            
-            image.renderRect.origin = newOrigin
-            image.renderRect.size = newSize
-            
-    //        image.image = UIImage()
-            
-            image.path.apply(translationTransform)
-            image.path.apply(scaleTrasfrom)
-            image.path.apply(invertedDranslationTransform)
+
+//            image.renderRect.origin = newOrigin
+//            image.renderRect.size = newSize
+//
+//            image.renderRect = image.renderRect.applying(translationTransform)
+//            image.renderRect = image.renderRect.applying(scaleTrasfrom)
+//            image.renderRect = image.renderRect.applying(invertedDranslationTransform)
+
+//            image.image = UIImage()
+//
+            image.applyDuringHandle(translationTransform)
+            image.applyDuringHandle(scaleTrasfrom)
+            image.applyDuringHandle(invertedDranslationTransform)
         }
         
         sender?.setNeedsDisplay()

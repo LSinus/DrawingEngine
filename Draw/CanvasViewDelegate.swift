@@ -62,7 +62,7 @@ class CVDelegate: CanvasViewDelegate{
         startTimerMovementDetection(in: canvasView)
         
         if let lasso = canvasView.tool as? Lasso{
-            lasso.checkState(position: touch.location(in: canvasView), canvasView: canvasView)
+            //lasso.checkState(position: touch.location(in: canvasView), canvasView: canvasView)
             lasso.beginDrawing(by: self, with: touch, in: canvasView)
             lasso.translateStroke(position: touch.location(in: canvasView), previousPosition: touch.previousLocation(in: canvasView), translateFrom: canvasView.drawing)
             RenderCanvas(canvasView)
@@ -78,6 +78,11 @@ class CVDelegate: CanvasViewDelegate{
         if let eraser = canvasView.tool as? EraserVec{
             eraser.erase(eraseLine: tempStroke, eraseFrom: canvasView.drawing)
         }
+        
+        if let _ = canvasView.tool as? Inspector{
+            print(touch.location(in: canvasView))
+            return
+        }
 
         RenderCanvas(canvasView)
         
@@ -88,7 +93,7 @@ class CVDelegate: CanvasViewDelegate{
         //let vel = calcVelocity(now: time, previousDate: previousTime, point: touch.location(in: canvasView), previousPoint: previous)
         
         if let lasso = canvasView.tool as? Lasso{
-            lasso.checkState(position: touch.location(in: canvasView), canvasView: canvasView)
+            //lasso.checkState(position: touch.location(in: canvasView), canvasView: canvasView)
             lasso.continueDrawing(by: self, with: touch, in: canvasView)
             lasso.translateStroke(position: touch.location(in: canvasView), previousPosition: touch.previousLocation(in: canvasView), translateFrom: canvasView.drawing)
             RenderCanvas(canvasView)
@@ -121,6 +126,11 @@ class CVDelegate: CanvasViewDelegate{
             RenderCanvas(canvasView)
         }
         
+        if let _ = canvasView.tool as? Inspector{
+            print(touch.location(in: canvasView))
+            return
+        }
+        
         let rectToRender = CGRect(x: (tempStroke.path.bounds.minX - 20), y: (tempStroke.path.bounds.minY - 20), width: (tempStroke.path.bounds.width + 50), height: (tempStroke.path.bounds.height + 50))
         RenderCanvas(canvasView, rect: rectToRender)
         
@@ -148,7 +158,7 @@ class CVDelegate: CanvasViewDelegate{
 //                }
 //            }
             lasso.translateStroke(position: touch.location(in: canvasView), previousPosition: touch.previousLocation(in: canvasView), translateFrom: canvasView.drawing)
-            lasso.checkState(position: touch.location(in: canvasView), canvasView: canvasView)
+            //lasso.checkState(position: touch.location(in: canvasView), canvasView: canvasView)
             lasso.finishDrawing(by: self, with: touch, in: canvasView)
             lasso.determineSelectedPaths(lassoStroke: tempStroke, selectFrom: canvasView.drawing)            
             
@@ -175,6 +185,10 @@ class CVDelegate: CanvasViewDelegate{
         } 
         if let _ = canvasView.tool as? Pen{
             canvasView.drawing.strokes.append(tempStroke)
+        }
+        
+        if let _ = canvasView.tool as? Inspector{
+            print(touch.location(in: canvasView))
         }
         
         tempStroke = Stroke()

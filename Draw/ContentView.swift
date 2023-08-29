@@ -63,6 +63,15 @@ struct ContentView: View {
                     } label: {
                         Image(systemName: "lasso")
                     }
+                    Button {
+                        SelectionMenuView.selectionMenu.resetMenu()
+                        cvc.canvasView.drawing.removeLassoStrokes()
+                        cvc.canvasView.setNeedsDisplay()
+                        cvc.canvasView.tool = Inspector()
+                        
+                    } label: {
+                        Image(systemName: "magnifyingglass")
+                    }
                     
                 },
                 trailing: HStack{
